@@ -556,3 +556,18 @@ lazy val refined = project
       "com.h2database"        %  "h2"             % h2Version          % "test"
     )
   )
+
+lazy val tagless = project
+  .in(file("modules/tagless"))
+  .enablePlugins(AutomateHeaderPlugin)
+  .dependsOn(core)
+  .dependsOn(postgres)
+  .settings(doobieSettings)
+  .settings(noPublishSettings)
+  .settings(
+    name := "doobie-tagless",
+    description := "Experimental tagless encoding",
+    scalacOptions --= Seq(
+      "-Xfatal-warnings",                  // Fail the compilation if there are any warnings.
+    )
+  )

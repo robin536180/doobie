@@ -39,6 +39,9 @@ object update {
     // Contravariant coyoneda trick for A
     protected implicit val write: Write[A]
 
+    def write: Write[A] =
+      ic.contramap(ai)
+
     // LogHandler is protected for now.
     protected val logHandler: LogHandler
 
