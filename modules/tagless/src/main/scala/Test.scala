@@ -29,6 +29,9 @@ object Test {
 
   val prog: IO[Unit] =
     xa.transact { c =>
+
+      // I want to say
+      // countries.stream(128).to(up.sink).compile.drain
       c.stream(Statements.countries, 128).to(c.sink(Statements.up)).compile.drain
     }
 

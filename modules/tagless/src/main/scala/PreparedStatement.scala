@@ -9,7 +9,7 @@ import cats.effect.Sync
 import cats.implicits._
 import doobie.Write
 import doobie.tagless.jdbc._
-import fs2.{ Sink, Stream }
+import fs2.{ Pipe, Sink, Stream }
 import java.sql
 
 final case class PreparedStatement[F[_]](jdbc: JdbcPreparedStatement[F], interp: Interpreter[F]) {
@@ -35,12 +35,33 @@ final case class PreparedStatement[F[_]](jdbc: JdbcPreparedStatement[F], interp:
       sf.delay(ca.unsafeSet(ps, offset, a))
     }
 
-  /** Construct a sink for batch insert. Simple case, discarding update counts. */
-@SuppressWarnings(Array("org.wartremover.warts.Var"))
+  /**
+   * Construct a sink for batch update, discarding update counts. Note that the result array will
+   * be computed by JDBC and then discarded, so this call has the same cost as `rawPipe`.
+   */
+  @SuppressWarnings(Array("org.wartremover.warts.Var"))
   def sink[A](
     implicit ca: Write[A],
              sf: Sync[F]
   ): Sink[F, A] = as =>
+    as.through(rawPipe[A]).drain
+
+  /**
+   * Construct a pipe for batch update, translating each input value into its update count. Unless
+   * you're inspecting the results it's cheaper to use `sink`.
+   */
+  def pipe[A](
+    implicit ca: Write[A],
+             sf: Sync[F]
+  ): Pipe[F, A, BatchResult] = as =>
+    as.through(rawPipe[A]).flatMap(a => Stream.emits(a)).map(BatchResult.fromJdbc)
+
+  /** Construct a pipe for batch update, emitting a single array containing raw JDBC update counts. */
+  @SuppressWarnings(Array("org.wartremover.warts.Var"))
+  private def rawPipe[A](
+    implicit ca: Write[A],
+             sf: Sync[F]
+  ): Pipe[F, A, Array[Int]] = as =>
     as.segments.evalMap { segment =>
       raw.flatMap { ps =>
         sf.delay {
@@ -54,6 +75,6 @@ final case class PreparedStatement[F[_]](jdbc: JdbcPreparedStatement[F], interp:
           Console.println(s"PreparedStatement.sink: got a segment of $n")
         }
       }
-    } .drain ++ Stream.eval(jdbc.executeBatch.void)
+    } .drain ++ Stream.eval(jdbc.executeBatch)
 
 }
