@@ -44,7 +44,9 @@ final case class PreparedStatement[F[_]](jdbc: JdbcPreparedStatement[F], interp:
     implicit ca: Write[A],
              sf: Sync[F]
   ): Sink[F, A] = as =>
-    as.through(rawPipe[A]).drain
+    Stream.eval_(sf.delay(Console.println("PreparedStatement.sink: starting"))) ++
+    as.through(rawPipe[A]).drain ++
+    Stream.eval_(sf.delay(Console.println("PreparedStatement.sink: done")))
 
   /**
    * Construct a pipe for batch update, translating each input value into its update count. Unless
@@ -72,9 +74,11 @@ final case class PreparedStatement[F[_]](jdbc: JdbcPreparedStatement[F], interp:
             ps.addBatch
             n += 1
           }
-          Console.println(s"PreparedStatement.sink: got a segment of $n")
+          Console.println(s"PreparedStatement.rawPipe: consumed $n")
         }
       }
-    } .drain ++ Stream.eval(jdbc.executeBatch)
+    } .drain ++
+     Stream.eval_(sf.delay(Console.println("PreparedStatement.rawPipe: done"))) ++
+     Stream.eval(jdbc.executeBatch)
 
 }

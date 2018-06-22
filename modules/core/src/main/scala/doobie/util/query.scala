@@ -30,11 +30,8 @@ object query {
    */
   trait Query[A, B] { outer =>
 
-    protected implicit val write: Write[A]
-    protected implicit val read: Read[B]
-
-    def read: Read[B] =
-      oc.map(ob)
+    implicit val write: Write[A]
+    implicit val read: Read[B]
 
     // LogHandler is protected for now.
     protected val logHandler: LogHandler

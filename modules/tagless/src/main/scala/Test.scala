@@ -32,7 +32,7 @@ object Test {
 
       // I want to say
       // countries.stream(128).to(up.sink).compile.drain
-      c.stream(Statements.countries, 128).to(c.sink(Statements.up)).compile.drain
+      c.stream(Statements.countries, 64).to(c.sink(Statements.up)).compile.drain
     }
 
 

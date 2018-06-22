@@ -477,7 +477,6 @@ class SyncPreparedStatement[F[_]](value: PreparedStatement)(implicit F: Sync[F])
     F.delay(value.setUnicodeStream(a, b, c))
 
   def unwrap[T](a: Class[T]) =
-    F.delay(Console.err.println(s"PreparedStatement.unwrap($a)")) *>
     F.delay(value.unwrap(a))
 
 }

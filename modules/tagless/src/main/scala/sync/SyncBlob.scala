@@ -2,7 +2,8 @@
 // This software is licensed under the MIT License (MIT).
 // For more information see LICENSE or https://opensource.org/licenses/MIT
 
-package doobie.tagless.sync
+package doobie.tagless
+package sync
 
 import cats.effect.Sync
 import cats.implicits._
@@ -19,16 +20,21 @@ import java.sql.Blob
 @SuppressWarnings(Array("org.wartremover.warts.Overloading"))
 class SyncBlob[F[_]](value: Blob)(implicit F: Sync[F]) extends JdbcBlob[F] {
 
+  private val prefix: String =
+    s"Blob:${System.identityHashCode(value).toHexString.toUpperCase} ".padTo(27, ' ')
+
   def free =
     F.delay(Console.err.println("Blob.free()")) *>
     F.delay(value.free())
 
   def getBinaryStream =
     F.delay(Console.err.println("Blob.getBinaryStream()")) *>
-    F.delay(value.getBinaryStream())
+    F.delay {
+      value.getBinaryStream()
+    }
 
   def getBinaryStream(a: Long, b: Long) =
-    F.delay(Console.err.println(s"Blob.getBinaryStream($a, $b)")) *>
+    F.delay(Console.err.println(s"$prefix getBinaryStream($a, $b)")) *>
     F.delay(value.getBinaryStream(a, b))
 
   def getBytes(a: Long, b: Int) =

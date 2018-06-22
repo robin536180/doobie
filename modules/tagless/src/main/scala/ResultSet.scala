@@ -29,11 +29,12 @@ final case class ResultSet[F[_]](jdbc: JdbcResultSet[F], interp: Interpreter[F])
   ): Stream[F, A] =
     Stream.eval_(jdbc.setFetchSize(chunkSize)) ++
     Stream.repeatEval(chunk[Vector, A](chunkSize.toLong))
-          .takeWhile(_.nonEmpty)
+          .takeThrough(_.length === chunkSize)
           .flatMap((c: Vector[A]) =>
-            Stream.eval_(sf.delay(Console.println(s"ResultSet.stream: just read ${c.length}"))) ++
+            Stream.eval_(sf.delay(Console.println(s"ResultSet.stream: enqueuing ${c.length}"))) ++
             Stream.emits(c)
-          )
+          ) ++
+    Stream.eval_(sf.delay(Console.println(s"ResultSet.stream: done")))
 
   /**
    * Accumulate up to `chunkSize` rows, interpreting rows as type `A`, into a collection `C`,
@@ -63,7 +64,7 @@ final case class ResultSet[F[_]](jdbc: JdbcResultSet[F], interp: Interpreter[F])
              sf: Sync[F],
             cbf: CanBuildFrom[Nothing, B, C[B]]
   ): F[C[B]] =
-    sf.delay(Console.println(s"ResultSet.chunkMap: about to read up to $chunkSize rows")) *>
+    sf.delay(Console.println(s"ResultSet.chunkMap: reading $chunkSize (max)")) *>
     raw.flatMap { rs =>
       sf.delay {
         @tailrec

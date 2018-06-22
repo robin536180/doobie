@@ -464,7 +464,6 @@ class SyncResultSet[F[_]](value: ResultSet)(implicit F: Sync[F]) extends JdbcRes
     F.delay(value.setFetchSize(a))
 
   def unwrap[T](a: Class[T]) =
-    F.delay(Console.err.println(s"ResultSet.unwrap($a)")) *>
     F.delay(value.unwrap(a))
 
   def updateArray(a: Int, b: SqlArray) =
