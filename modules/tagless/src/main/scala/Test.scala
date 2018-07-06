@@ -5,13 +5,17 @@
 package doobie.tagless
 
 import cats.effect._
+import cats.implicits._
 import doobie.{ Query0, Update }
 import doobie.syntax.string._
+import org.slf4j._
 
 @SuppressWarnings(Array("org.wartremover.warts.ToString"))
 object Test {
 
-  final case class Country(code: String, name: String)
+  final case class Code(code: String)
+
+  final case class Country(code: Code, name: String)
 
   val xa = Transactor.fromDriverManager[IO](
     "org.postgresql.Driver", "jdbc:postgresql:world", "postgres", ""
@@ -27,16 +31,23 @@ object Test {
 
   }
 
+  def go[F[_]: Sync](c: Connection[F]): F[Unit] =
+    c.stream(Statements.countries, 64).to(c.sink(Statements.up)).compile.drain
+
+  lazy val log =
+    LoggerFactory.getLogger("doobie")
+
   val prog: IO[Unit] =
-    xa.transact { c =>
+    Async.shift[IO](RTS.global[IO].cpu) *>
+    IO(log.info("Starting up.")) *>
+    xa.transact(go(_)) *>
+    IO(log.info(s"Done."))
 
-      // I want to say
-      // countries.stream(128).to(up.sink).compile.drain
-      c.stream(Statements.countries, 64).to(c.sink(Statements.up)).compile.drain
-    }
-
-
-  def main(args: Array[String]): Unit =
+  def main(args: Array[String]): Unit = {
+    val a = System.setProperty("org.slf4j.simpleLogger.log.doobie", "trace")
+    log.info(s"main <enter>")
     prog.unsafeRunSync
+    log.info(s"main <exit>")
+  }
 
 }

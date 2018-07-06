@@ -6,7 +6,6 @@ package doobie.tagless.sync
 
 import cats.effect.Sync
 import cats.implicits._
-import cats.syntax._
 import doobie.tagless.jdbc._
 import java.io.InputStream
 import java.io.Reader
@@ -33,116 +32,116 @@ import java.sql.{ Array => SqlArray }
 @SuppressWarnings(Array("org.wartremover.warts.Overloading"))
 class SyncSQLInput[F[_]](value: SQLInput)(implicit F: Sync[F]) extends JdbcSQLInput[F] {
 
-  def readArray =
-    F.delay(Console.err.println("SQLInput.readArray()")) *>
+  val readArray: F[SqlArray] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: SQLInput.readArray()")) *>
     F.delay(value.readArray())
 
-  def readAsciiStream =
-    F.delay(Console.err.println("SQLInput.readAsciiStream()")) *>
+  val readAsciiStream: F[InputStream] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: SQLInput.readAsciiStream()")) *>
     F.delay(value.readAsciiStream())
 
-  def readBigDecimal =
-    F.delay(Console.err.println("SQLInput.readBigDecimal()")) *>
+  val readBigDecimal: F[BigDecimal] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: SQLInput.readBigDecimal()")) *>
     F.delay(value.readBigDecimal())
 
-  def readBinaryStream =
-    F.delay(Console.err.println("SQLInput.readBinaryStream()")) *>
+  val readBinaryStream: F[InputStream] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: SQLInput.readBinaryStream()")) *>
     F.delay(value.readBinaryStream())
 
-  def readBlob =
-    F.delay(Console.err.println("SQLInput.readBlob()")) *>
+  val readBlob: F[Blob] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: SQLInput.readBlob()")) *>
     F.delay(value.readBlob())
 
-  def readBoolean =
-    F.delay(Console.err.println("SQLInput.readBoolean()")) *>
+  val readBoolean: F[Boolean] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: SQLInput.readBoolean()")) *>
     F.delay(value.readBoolean())
 
-  def readByte =
-    F.delay(Console.err.println("SQLInput.readByte()")) *>
+  val readByte: F[Byte] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: SQLInput.readByte()")) *>
     F.delay(value.readByte())
 
-  def readBytes =
-    F.delay(Console.err.println("SQLInput.readBytes()")) *>
+  val readBytes: F[Array[Byte]] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: SQLInput.readBytes()")) *>
     F.delay(value.readBytes())
 
-  def readCharacterStream =
-    F.delay(Console.err.println("SQLInput.readCharacterStream()")) *>
+  val readCharacterStream: F[Reader] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: SQLInput.readCharacterStream()")) *>
     F.delay(value.readCharacterStream())
 
-  def readClob =
-    F.delay(Console.err.println("SQLInput.readClob()")) *>
+  val readClob: F[Clob] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: SQLInput.readClob()")) *>
     F.delay(value.readClob())
 
-  def readDate =
-    F.delay(Console.err.println("SQLInput.readDate()")) *>
+  val readDate: F[Date] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: SQLInput.readDate()")) *>
     F.delay(value.readDate())
 
-  def readDouble =
-    F.delay(Console.err.println("SQLInput.readDouble()")) *>
+  val readDouble: F[Double] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: SQLInput.readDouble()")) *>
     F.delay(value.readDouble())
 
-  def readFloat =
-    F.delay(Console.err.println("SQLInput.readFloat()")) *>
+  val readFloat: F[Float] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: SQLInput.readFloat()")) *>
     F.delay(value.readFloat())
 
-  def readInt =
-    F.delay(Console.err.println("SQLInput.readInt()")) *>
+  val readInt: F[Int] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: SQLInput.readInt()")) *>
     F.delay(value.readInt())
 
-  def readLong =
-    F.delay(Console.err.println("SQLInput.readLong()")) *>
+  val readLong: F[Long] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: SQLInput.readLong()")) *>
     F.delay(value.readLong())
 
-  def readNClob =
-    F.delay(Console.err.println("SQLInput.readNClob()")) *>
+  val readNClob: F[NClob] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: SQLInput.readNClob()")) *>
     F.delay(value.readNClob())
 
-  def readNString =
-    F.delay(Console.err.println("SQLInput.readNString()")) *>
+  val readNString: F[String] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: SQLInput.readNString()")) *>
     F.delay(value.readNString())
 
-  def readObject =
-    F.delay(Console.err.println("SQLInput.readObject()")) *>
+  val readObject: F[AnyRef] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: SQLInput.readObject()")) *>
     F.delay(value.readObject())
 
-  def readObject[T](a: Class[T]) =
-    F.delay(Console.err.println(s"SQLInput.readObject($a)")) *>
+  def readObject[T](a: Class[T]): F[T] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: SQLInput.readObject($a)")) *>
     F.delay(value.readObject(a))
 
-  def readRef =
-    F.delay(Console.err.println("SQLInput.readRef()")) *>
+  val readRef: F[Ref] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: SQLInput.readRef()")) *>
     F.delay(value.readRef())
 
-  def readRowId =
-    F.delay(Console.err.println("SQLInput.readRowId()")) *>
+  val readRowId: F[RowId] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: SQLInput.readRowId()")) *>
     F.delay(value.readRowId())
 
-  def readSQLXML =
-    F.delay(Console.err.println("SQLInput.readSQLXML()")) *>
+  val readSQLXML: F[SQLXML] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: SQLInput.readSQLXML()")) *>
     F.delay(value.readSQLXML())
 
-  def readShort =
-    F.delay(Console.err.println("SQLInput.readShort()")) *>
+  val readShort: F[Short] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: SQLInput.readShort()")) *>
     F.delay(value.readShort())
 
-  def readString =
-    F.delay(Console.err.println("SQLInput.readString()")) *>
+  val readString: F[String] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: SQLInput.readString()")) *>
     F.delay(value.readString())
 
-  def readTime =
-    F.delay(Console.err.println("SQLInput.readTime()")) *>
+  val readTime: F[Time] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: SQLInput.readTime()")) *>
     F.delay(value.readTime())
 
-  def readTimestamp =
-    F.delay(Console.err.println("SQLInput.readTimestamp()")) *>
+  val readTimestamp: F[Timestamp] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: SQLInput.readTimestamp()")) *>
     F.delay(value.readTimestamp())
 
-  def readURL =
-    F.delay(Console.err.println("SQLInput.readURL()")) *>
+  val readURL: F[URL] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: SQLInput.readURL()")) *>
     F.delay(value.readURL())
 
-  def wasNull =
-    F.delay(Console.err.println("SQLInput.wasNull()")) *>
+  val wasNull: F[Boolean] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: SQLInput.wasNull()")) *>
     F.delay(value.wasNull())
 
 }

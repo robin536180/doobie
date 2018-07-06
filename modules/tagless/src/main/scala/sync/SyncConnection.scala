@@ -6,7 +6,6 @@ package doobie.tagless.sync
 
 import cats.effect.Sync
 import cats.implicits._
-import cats.syntax._
 import doobie.tagless.jdbc._
 import java.lang.Class
 import java.lang.String
@@ -34,220 +33,220 @@ import java.util.concurrent.Executor
 @SuppressWarnings(Array("org.wartremover.warts.Overloading"))
 class SyncConnection[F[_]](value: Connection)(implicit F: Sync[F]) extends JdbcConnection[F] {
 
-  def abort(a: Executor) =
-    F.delay(Console.err.println(s"Connection.abort($a)")) *>
+  def abort(a: Executor): F[Unit] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: Connection.abort($a)")) *>
     F.delay(value.abort(a))
 
-  def clearWarnings =
-    F.delay(Console.err.println("Connection.clearWarnings()")) *>
+  val clearWarnings: F[Unit] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: Connection.clearWarnings()")) *>
     F.delay(value.clearWarnings())
 
-  def close =
-    F.delay(Console.err.println("Connection.close()")) *>
+  val close: F[Unit] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: Connection.close()")) *>
     F.delay(value.close())
 
-  def commit =
-    F.delay(Console.err.println("Connection.commit()")) *>
+  val commit: F[Unit] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: Connection.commit()")) *>
     F.delay(value.commit())
 
-  def createArrayOf(a: String, b: Array[AnyRef]) =
-    F.delay(Console.err.println(s"Connection.createArrayOf($a, $b)")) *>
+  def createArrayOf(a: String, b: Array[AnyRef]): F[SqlArray] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: Connection.createArrayOf($a, $b)")) *>
     F.delay(value.createArrayOf(a, b))
 
-  def createBlob =
-    F.delay(Console.err.println("Connection.createBlob()")) *>
+  val createBlob: F[Blob] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: Connection.createBlob()")) *>
     F.delay(value.createBlob())
 
-  def createClob =
-    F.delay(Console.err.println("Connection.createClob()")) *>
+  val createClob: F[Clob] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: Connection.createClob()")) *>
     F.delay(value.createClob())
 
-  def createNClob =
-    F.delay(Console.err.println("Connection.createNClob()")) *>
+  val createNClob: F[NClob] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: Connection.createNClob()")) *>
     F.delay(value.createNClob())
 
-  def createSQLXML =
-    F.delay(Console.err.println("Connection.createSQLXML()")) *>
+  val createSQLXML: F[SQLXML] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: Connection.createSQLXML()")) *>
     F.delay(value.createSQLXML())
 
-  def createStatement =
-    F.delay(Console.err.println("Connection.createStatement()")) *>
+  val createStatement: F[Statement] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: Connection.createStatement()")) *>
     F.delay(value.createStatement())
 
-  def createStatement(a: Int, b: Int) =
-    F.delay(Console.err.println(s"Connection.createStatement($a, $b)")) *>
+  def createStatement(a: Int, b: Int): F[Statement] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: Connection.createStatement($a, $b)")) *>
     F.delay(value.createStatement(a, b))
 
-  def createStatement(a: Int, b: Int, c: Int) =
-    F.delay(Console.err.println(s"Connection.createStatement($a, $b, $c)")) *>
+  def createStatement(a: Int, b: Int, c: Int): F[Statement] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: Connection.createStatement($a, $b, $c)")) *>
     F.delay(value.createStatement(a, b, c))
 
-  def createStruct(a: String, b: Array[AnyRef]) =
-    F.delay(Console.err.println(s"Connection.createStruct($a, $b)")) *>
+  def createStruct(a: String, b: Array[AnyRef]): F[Struct] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: Connection.createStruct($a, $b)")) *>
     F.delay(value.createStruct(a, b))
 
-  def getAutoCommit =
-    F.delay(Console.err.println("Connection.getAutoCommit()")) *>
+  val getAutoCommit: F[Boolean] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: Connection.getAutoCommit()")) *>
     F.delay(value.getAutoCommit())
 
-  def getCatalog =
-    F.delay(Console.err.println("Connection.getCatalog()")) *>
+  val getCatalog: F[String] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: Connection.getCatalog()")) *>
     F.delay(value.getCatalog())
 
-  def getClientInfo =
-    F.delay(Console.err.println("Connection.getClientInfo()")) *>
+  val getClientInfo: F[Properties] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: Connection.getClientInfo()")) *>
     F.delay(value.getClientInfo())
 
-  def getClientInfo(a: String) =
-    F.delay(Console.err.println(s"Connection.getClientInfo($a)")) *>
+  def getClientInfo(a: String): F[String] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: Connection.getClientInfo($a)")) *>
     F.delay(value.getClientInfo(a))
 
-  def getHoldability =
-    F.delay(Console.err.println("Connection.getHoldability()")) *>
+  val getHoldability: F[Int] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: Connection.getHoldability()")) *>
     F.delay(value.getHoldability())
 
-  def getMetaData =
-    F.delay(Console.err.println("Connection.getMetaData()")) *>
+  val getMetaData: F[DatabaseMetaData] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: Connection.getMetaData()")) *>
     F.delay(value.getMetaData())
 
-  def getNetworkTimeout =
-    F.delay(Console.err.println("Connection.getNetworkTimeout()")) *>
+  val getNetworkTimeout: F[Int] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: Connection.getNetworkTimeout()")) *>
     F.delay(value.getNetworkTimeout())
 
-  def getSchema =
-    F.delay(Console.err.println("Connection.getSchema()")) *>
+  val getSchema: F[String] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: Connection.getSchema()")) *>
     F.delay(value.getSchema())
 
-  def getTransactionIsolation =
-    F.delay(Console.err.println("Connection.getTransactionIsolation()")) *>
+  val getTransactionIsolation: F[Int] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: Connection.getTransactionIsolation()")) *>
     F.delay(value.getTransactionIsolation())
 
-  def getTypeMap =
-    F.delay(Console.err.println("Connection.getTypeMap()")) *>
+  val getTypeMap: F[Map[String, Class[_]]] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: Connection.getTypeMap()")) *>
     F.delay(value.getTypeMap())
 
-  def getWarnings =
-    F.delay(Console.err.println("Connection.getWarnings()")) *>
+  val getWarnings: F[SQLWarning] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: Connection.getWarnings()")) *>
     F.delay(value.getWarnings())
 
-  def isClosed =
-    F.delay(Console.err.println("Connection.isClosed()")) *>
+  val isClosed: F[Boolean] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: Connection.isClosed()")) *>
     F.delay(value.isClosed())
 
-  def isReadOnly =
-    F.delay(Console.err.println("Connection.isReadOnly()")) *>
+  val isReadOnly: F[Boolean] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: Connection.isReadOnly()")) *>
     F.delay(value.isReadOnly())
 
-  def isValid(a: Int) =
-    F.delay(Console.err.println(s"Connection.isValid($a)")) *>
+  def isValid(a: Int): F[Boolean] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: Connection.isValid($a)")) *>
     F.delay(value.isValid(a))
 
-  def isWrapperFor(a: Class[_]) =
-    F.delay(Console.err.println(s"Connection.isWrapperFor($a)")) *>
+  def isWrapperFor(a: Class[_]): F[Boolean] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: Connection.isWrapperFor($a)")) *>
     F.delay(value.isWrapperFor(a))
 
-  def nativeSQL(a: String) =
-    F.delay(Console.err.println(s"Connection.nativeSQL($a)")) *>
+  def nativeSQL(a: String): F[String] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: Connection.nativeSQL($a)")) *>
     F.delay(value.nativeSQL(a))
 
-  def prepareCall(a: String) =
-    F.delay(Console.err.println(s"Connection.prepareCall($a)")) *>
+  def prepareCall(a: String): F[CallableStatement] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: Connection.prepareCall($a)")) *>
     F.delay(value.prepareCall(a))
 
-  def prepareCall(a: String, b: Int, c: Int) =
-    F.delay(Console.err.println(s"Connection.prepareCall($a, $b, $c)")) *>
+  def prepareCall(a: String, b: Int, c: Int): F[CallableStatement] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: Connection.prepareCall($a, $b, $c)")) *>
     F.delay(value.prepareCall(a, b, c))
 
-  def prepareCall(a: String, b: Int, c: Int, d: Int) =
-    F.delay(Console.err.println(s"Connection.prepareCall($a, $b, $c, $d)")) *>
+  def prepareCall(a: String, b: Int, c: Int, d: Int): F[CallableStatement] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: Connection.prepareCall($a, $b, $c, $d)")) *>
     F.delay(value.prepareCall(a, b, c, d))
 
-  def prepareStatement(a: String) =
-    F.delay(Console.err.println(s"Connection.prepareStatement($a)")) *>
+  def prepareStatement(a: String): F[PreparedStatement] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: Connection.prepareStatement($a)")) *>
     F.delay(value.prepareStatement(a))
 
-  def prepareStatement(a: String, b: Array[Int]) =
-    F.delay(Console.err.println(s"Connection.prepareStatement($a, $b)")) *>
+  def prepareStatement(a: String, b: Array[Int]): F[PreparedStatement] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: Connection.prepareStatement($a, $b)")) *>
     F.delay(value.prepareStatement(a, b))
 
-  def prepareStatement(a: String, b: Array[String]) =
-    F.delay(Console.err.println(s"Connection.prepareStatement($a, $b)")) *>
+  def prepareStatement(a: String, b: Array[String]): F[PreparedStatement] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: Connection.prepareStatement($a, $b)")) *>
     F.delay(value.prepareStatement(a, b))
 
-  def prepareStatement(a: String, b: Int) =
-    F.delay(Console.err.println(s"Connection.prepareStatement($a, $b)")) *>
+  def prepareStatement(a: String, b: Int): F[PreparedStatement] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: Connection.prepareStatement($a, $b)")) *>
     F.delay(value.prepareStatement(a, b))
 
-  def prepareStatement(a: String, b: Int, c: Int) =
-    F.delay(Console.err.println(s"Connection.prepareStatement($a, $b, $c)")) *>
+  def prepareStatement(a: String, b: Int, c: Int): F[PreparedStatement] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: Connection.prepareStatement($a, $b, $c)")) *>
     F.delay(value.prepareStatement(a, b, c))
 
-  def prepareStatement(a: String, b: Int, c: Int, d: Int) =
-    F.delay(Console.err.println(s"Connection.prepareStatement($a, $b, $c, $d)")) *>
+  def prepareStatement(a: String, b: Int, c: Int, d: Int): F[PreparedStatement] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: Connection.prepareStatement($a, $b, $c, $d)")) *>
     F.delay(value.prepareStatement(a, b, c, d))
 
-  def releaseSavepoint(a: Savepoint) =
-    F.delay(Console.err.println(s"Connection.releaseSavepoint($a)")) *>
+  def releaseSavepoint(a: Savepoint): F[Unit] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: Connection.releaseSavepoint($a)")) *>
     F.delay(value.releaseSavepoint(a))
 
-  def rollback =
-    F.delay(Console.err.println("Connection.rollback()")) *>
+  val rollback: F[Unit] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: Connection.rollback()")) *>
     F.delay(value.rollback())
 
-  def rollback(a: Savepoint) =
-    F.delay(Console.err.println(s"Connection.rollback($a)")) *>
+  def rollback(a: Savepoint): F[Unit] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: Connection.rollback($a)")) *>
     F.delay(value.rollback(a))
 
-  def setAutoCommit(a: Boolean) =
-    F.delay(Console.err.println(s"Connection.setAutoCommit($a)")) *>
+  def setAutoCommit(a: Boolean): F[Unit] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: Connection.setAutoCommit($a)")) *>
     F.delay(value.setAutoCommit(a))
 
-  def setCatalog(a: String) =
-    F.delay(Console.err.println(s"Connection.setCatalog($a)")) *>
+  def setCatalog(a: String): F[Unit] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: Connection.setCatalog($a)")) *>
     F.delay(value.setCatalog(a))
 
-  def setClientInfo(a: Properties) =
-    F.delay(Console.err.println(s"Connection.setClientInfo($a)")) *>
+  def setClientInfo(a: Properties): F[Unit] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: Connection.setClientInfo($a)")) *>
     F.delay(value.setClientInfo(a))
 
-  def setClientInfo(a: String, b: String) =
-    F.delay(Console.err.println(s"Connection.setClientInfo($a, $b)")) *>
+  def setClientInfo(a: String, b: String): F[Unit] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: Connection.setClientInfo($a, $b)")) *>
     F.delay(value.setClientInfo(a, b))
 
-  def setHoldability(a: Int) =
-    F.delay(Console.err.println(s"Connection.setHoldability($a)")) *>
+  def setHoldability(a: Int): F[Unit] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: Connection.setHoldability($a)")) *>
     F.delay(value.setHoldability(a))
 
-  def setNetworkTimeout(a: Executor, b: Int) =
-    F.delay(Console.err.println(s"Connection.setNetworkTimeout($a, $b)")) *>
+  def setNetworkTimeout(a: Executor, b: Int): F[Unit] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: Connection.setNetworkTimeout($a, $b)")) *>
     F.delay(value.setNetworkTimeout(a, b))
 
-  def setReadOnly(a: Boolean) =
-    F.delay(Console.err.println(s"Connection.setReadOnly($a)")) *>
+  def setReadOnly(a: Boolean): F[Unit] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: Connection.setReadOnly($a)")) *>
     F.delay(value.setReadOnly(a))
 
-  def setSavepoint =
-    F.delay(Console.err.println("Connection.setSavepoint()")) *>
+  val setSavepoint: F[Savepoint] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: Connection.setSavepoint()")) *>
     F.delay(value.setSavepoint())
 
-  def setSavepoint(a: String) =
-    F.delay(Console.err.println(s"Connection.setSavepoint($a)")) *>
+  def setSavepoint(a: String): F[Savepoint] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: Connection.setSavepoint($a)")) *>
     F.delay(value.setSavepoint(a))
 
-  def setSchema(a: String) =
-    F.delay(Console.err.println(s"Connection.setSchema($a)")) *>
+  def setSchema(a: String): F[Unit] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: Connection.setSchema($a)")) *>
     F.delay(value.setSchema(a))
 
-  def setTransactionIsolation(a: Int) =
-    F.delay(Console.err.println(s"Connection.setTransactionIsolation($a)")) *>
+  def setTransactionIsolation(a: Int): F[Unit] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: Connection.setTransactionIsolation($a)")) *>
     F.delay(value.setTransactionIsolation(a))
 
-  def setTypeMap(a: Map[String, Class[_]]) =
-    F.delay(Console.err.println(s"Connection.setTypeMap($a)")) *>
+  def setTypeMap(a: Map[String, Class[_]]): F[Unit] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: Connection.setTypeMap($a)")) *>
     F.delay(value.setTypeMap(a))
 
-  def unwrap[T](a: Class[T]) =
-    F.delay(Console.err.println(s"Connection.unwrap($a)")) *>
+  def unwrap[T](a: Class[T]): F[T] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: Connection.unwrap($a)")) *>
     F.delay(value.unwrap(a))
 
 }

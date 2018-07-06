@@ -4,9 +4,12 @@
 
 package doobie.tagless
 
+import cats.effect.Async
 import doobie.tagless.jdbc._
+import doobie.tagless.async.AsyncInterpreter
+import org.slf4j.{ Logger, LoggerFactory }
 
-final case class Interpreter[F[_]](jdbc: JdbcInterpreter[F]) {
+final case class Interpreter[F[_]](jdbc: JdbcInterpreter[F], rts: RTS[F], log: Logger) {
   def forNClob(a: java.sql.NClob): NClob[F] = NClob(jdbc.forNClob(a), this)
   def forBlob(a: java.sql.Blob): Blob[F] = Blob(jdbc.forBlob(a), this)
   def forClob(a: java.sql.Clob): Clob[F] = Clob(jdbc.forClob(a), this)
@@ -21,6 +24,17 @@ final case class Interpreter[F[_]](jdbc: JdbcInterpreter[F]) {
   def forPreparedStatement(a: java.sql.PreparedStatement): PreparedStatement[F] = PreparedStatement(jdbc.forPreparedStatement(a), this)
   def forCallableStatement(a: java.sql.CallableStatement): CallableStatement[F] = CallableStatement(jdbc.forCallableStatement(a), this)
   def forResultSet(a: java.sql.ResultSet): ResultSet[F] = ResultSet(jdbc.forResultSet(a), this)
+}
+
+object Interpreter {
+
+  def default[M[_]: Async]: Interpreter[M] = {
+    val rts  = RTS.global[M]
+    val log  = LoggerFactory.getLogger("doobie")
+    val jdbc = AsyncInterpreter[M](rts, log)
+    Interpreter(jdbc, rts, log)
+  }
+
 }
 
 // Unimplemented

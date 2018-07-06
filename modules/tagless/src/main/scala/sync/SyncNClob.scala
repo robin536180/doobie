@@ -6,7 +6,6 @@ package doobie.tagless.sync
 
 import cats.effect.Sync
 import cats.implicits._
-import cats.syntax._
 import doobie.tagless.jdbc._
 import java.io.InputStream
 import java.io.OutputStream
@@ -23,56 +22,56 @@ import java.sql.NClob
 @SuppressWarnings(Array("org.wartremover.warts.Overloading"))
 class SyncNClob[F[_]](value: NClob)(implicit F: Sync[F]) extends JdbcNClob[F] {
 
-  def free =
-    F.delay(Console.err.println("NClob.free()")) *>
+  val free: F[Unit] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: NClob.free()")) *>
     F.delay(value.free())
 
-  def getAsciiStream =
-    F.delay(Console.err.println("NClob.getAsciiStream()")) *>
+  val getAsciiStream: F[InputStream] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: NClob.getAsciiStream()")) *>
     F.delay(value.getAsciiStream())
 
-  def getCharacterStream =
-    F.delay(Console.err.println("NClob.getCharacterStream()")) *>
+  val getCharacterStream: F[Reader] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: NClob.getCharacterStream()")) *>
     F.delay(value.getCharacterStream())
 
-  def getCharacterStream(a: Long, b: Long) =
-    F.delay(Console.err.println(s"NClob.getCharacterStream($a, $b)")) *>
+  def getCharacterStream(a: Long, b: Long): F[Reader] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: NClob.getCharacterStream($a, $b)")) *>
     F.delay(value.getCharacterStream(a, b))
 
-  def getSubString(a: Long, b: Int) =
-    F.delay(Console.err.println(s"NClob.getSubString($a, $b)")) *>
+  def getSubString(a: Long, b: Int): F[String] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: NClob.getSubString($a, $b)")) *>
     F.delay(value.getSubString(a, b))
 
-  def length =
-    F.delay(Console.err.println("NClob.length()")) *>
+  val length: F[Long] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: NClob.length()")) *>
     F.delay(value.length())
 
-  def position(a: Clob, b: Long) =
-    F.delay(Console.err.println(s"NClob.position($a, $b)")) *>
+  def position(a: Clob, b: Long): F[Long] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: NClob.position($a, $b)")) *>
     F.delay(value.position(a, b))
 
-  def position(a: String, b: Long) =
-    F.delay(Console.err.println(s"NClob.position($a, $b)")) *>
+  def position(a: String, b: Long): F[Long] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: NClob.position($a, $b)")) *>
     F.delay(value.position(a, b))
 
-  def setAsciiStream(a: Long) =
-    F.delay(Console.err.println(s"NClob.setAsciiStream($a)")) *>
+  def setAsciiStream(a: Long): F[OutputStream] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: NClob.setAsciiStream($a)")) *>
     F.delay(value.setAsciiStream(a))
 
-  def setCharacterStream(a: Long) =
-    F.delay(Console.err.println(s"NClob.setCharacterStream($a)")) *>
+  def setCharacterStream(a: Long): F[Writer] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: NClob.setCharacterStream($a)")) *>
     F.delay(value.setCharacterStream(a))
 
-  def setString(a: Long, b: String) =
-    F.delay(Console.err.println(s"NClob.setString($a, $b)")) *>
+  def setString(a: Long, b: String): F[Int] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: NClob.setString($a, $b)")) *>
     F.delay(value.setString(a, b))
 
-  def setString(a: Long, b: String, c: Int, d: Int) =
-    F.delay(Console.err.println(s"NClob.setString($a, $b, $c, $d)")) *>
+  def setString(a: Long, b: String, c: Int, d: Int): F[Int] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: NClob.setString($a, $b, $c, $d)")) *>
     F.delay(value.setString(a, b, c, d))
 
-  def truncate(a: Long) =
-    F.delay(Console.err.println(s"NClob.truncate($a)")) *>
+  def truncate(a: Long): F[Unit] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: NClob.truncate($a)")) *>
     F.delay(value.truncate(a))
 
 }

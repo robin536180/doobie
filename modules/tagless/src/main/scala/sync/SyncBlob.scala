@@ -2,12 +2,10 @@
 // This software is licensed under the MIT License (MIT).
 // For more information see LICENSE or https://opensource.org/licenses/MIT
 
-package doobie.tagless
-package sync
+package doobie.tagless.sync
 
 import cats.effect.Sync
 import cats.implicits._
-import cats.syntax._
 import doobie.tagless.jdbc._
 import java.io.InputStream
 import java.io.OutputStream
@@ -20,53 +18,48 @@ import java.sql.Blob
 @SuppressWarnings(Array("org.wartremover.warts.Overloading"))
 class SyncBlob[F[_]](value: Blob)(implicit F: Sync[F]) extends JdbcBlob[F] {
 
-  private val prefix: String =
-    s"Blob:${System.identityHashCode(value).toHexString.toUpperCase} ".padTo(27, ' ')
-
-  def free =
-    F.delay(Console.err.println("Blob.free()")) *>
+  val free: F[Unit] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: Blob.free()")) *>
     F.delay(value.free())
 
-  def getBinaryStream =
-    F.delay(Console.err.println("Blob.getBinaryStream()")) *>
-    F.delay {
-      value.getBinaryStream()
-    }
+  val getBinaryStream: F[InputStream] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: Blob.getBinaryStream()")) *>
+    F.delay(value.getBinaryStream())
 
-  def getBinaryStream(a: Long, b: Long) =
-    F.delay(Console.err.println(s"$prefix getBinaryStream($a, $b)")) *>
+  def getBinaryStream(a: Long, b: Long): F[InputStream] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: Blob.getBinaryStream($a, $b)")) *>
     F.delay(value.getBinaryStream(a, b))
 
-  def getBytes(a: Long, b: Int) =
-    F.delay(Console.err.println(s"Blob.getBytes($a, $b)")) *>
+  def getBytes(a: Long, b: Int): F[Array[Byte]] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: Blob.getBytes($a, $b)")) *>
     F.delay(value.getBytes(a, b))
 
-  def length =
-    F.delay(Console.err.println("Blob.length()")) *>
+  val length: F[Long] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: Blob.length()")) *>
     F.delay(value.length())
 
-  def position(a: Array[Byte], b: Long) =
-    F.delay(Console.err.println(s"Blob.position($a, $b)")) *>
+  def position(a: Array[Byte], b: Long): F[Long] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: Blob.position($a, $b)")) *>
     F.delay(value.position(a, b))
 
-  def position(a: Blob, b: Long) =
-    F.delay(Console.err.println(s"Blob.position($a, $b)")) *>
+  def position(a: Blob, b: Long): F[Long] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: Blob.position($a, $b)")) *>
     F.delay(value.position(a, b))
 
-  def setBinaryStream(a: Long) =
-    F.delay(Console.err.println(s"Blob.setBinaryStream($a)")) *>
+  def setBinaryStream(a: Long): F[OutputStream] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: Blob.setBinaryStream($a)")) *>
     F.delay(value.setBinaryStream(a))
 
-  def setBytes(a: Long, b: Array[Byte]) =
-    F.delay(Console.err.println(s"Blob.setBytes($a, $b)")) *>
+  def setBytes(a: Long, b: Array[Byte]): F[Int] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: Blob.setBytes($a, $b)")) *>
     F.delay(value.setBytes(a, b))
 
-  def setBytes(a: Long, b: Array[Byte], c: Int, d: Int) =
-    F.delay(Console.err.println(s"Blob.setBytes($a, $b, $c, $d)")) *>
+  def setBytes(a: Long, b: Array[Byte], c: Int, d: Int): F[Int] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: Blob.setBytes($a, $b, $c, $d)")) *>
     F.delay(value.setBytes(a, b, c, d))
 
-  def truncate(a: Long) =
-    F.delay(Console.err.println(s"Blob.truncate($a)")) *>
+  def truncate(a: Long): F[Unit] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: Blob.truncate($a)")) *>
     F.delay(value.truncate(a))
 
 }

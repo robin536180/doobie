@@ -6,7 +6,6 @@ package doobie.tagless.sync
 
 import cats.effect.Sync
 import cats.implicits._
-import cats.syntax._
 import doobie.tagless.jdbc._
 import java.lang.String
 import java.sql.SQLData
@@ -20,16 +19,16 @@ import java.sql.SQLOutput
 @SuppressWarnings(Array("org.wartremover.warts.Overloading"))
 class SyncSQLData[F[_]](value: SQLData)(implicit F: Sync[F]) extends JdbcSQLData[F] {
 
-  def getSQLTypeName =
-    F.delay(Console.err.println("SQLData.getSQLTypeName()")) *>
+  val getSQLTypeName: F[String] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: SQLData.getSQLTypeName()")) *>
     F.delay(value.getSQLTypeName())
 
-  def readSQL(a: SQLInput, b: String) =
-    F.delay(Console.err.println(s"SQLData.readSQL($a, $b)")) *>
+  def readSQL(a: SQLInput, b: String): F[Unit] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: SQLData.readSQL($a, $b)")) *>
     F.delay(value.readSQL(a, b))
 
-  def writeSQL(a: SQLOutput) =
-    F.delay(Console.err.println(s"SQLData.writeSQL($a)")) *>
+  def writeSQL(a: SQLOutput): F[Unit] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: SQLData.writeSQL($a)")) *>
     F.delay(value.writeSQL(a))
 
 }

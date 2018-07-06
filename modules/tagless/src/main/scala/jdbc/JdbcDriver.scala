@@ -9,7 +9,7 @@ import java.sql.Connection
 import java.sql.Driver
 import java.sql.DriverPropertyInfo
 import java.util.Properties
-import java.util.logging.Logger
+import java.util.logging.{ Logger => JdkLogger }
 
 /** Algebra of operations for `java.sql.Driver`. */
 @SuppressWarnings(Array("org.wartremover.warts.Overloading"))
@@ -18,7 +18,7 @@ trait JdbcDriver[F[_]] {
   def connect(a: String, b: Properties): F[Connection]
   def getMajorVersion: F[Int]
   def getMinorVersion: F[Int]
-  def getParentLogger: F[Logger]
+  def getParentLogger: F[JdkLogger]
   def getPropertyInfo(a: String, b: Properties): F[Array[DriverPropertyInfo]]
   def jdbcCompliant: F[Boolean]
 }

@@ -30,11 +30,7 @@ final case class ResultSet[F[_]](jdbc: JdbcResultSet[F], interp: Interpreter[F])
     Stream.eval_(jdbc.setFetchSize(chunkSize)) ++
     Stream.repeatEval(chunk[Vector, A](chunkSize.toLong))
           .takeThrough(_.length === chunkSize)
-          .flatMap((c: Vector[A]) =>
-            Stream.eval_(sf.delay(Console.println(s"ResultSet.stream: enqueuing ${c.length}"))) ++
-            Stream.emits(c)
-          ) ++
-    Stream.eval_(sf.delay(Console.println(s"ResultSet.stream: done")))
+          .flatMap((c: Vector[A]) => Stream.emits(c))
 
   /**
    * Accumulate up to `chunkSize` rows, interpreting rows as type `A`, into a collection `C`,
@@ -59,21 +55,31 @@ final case class ResultSet[F[_]](jdbc: JdbcResultSet[F], interp: Interpreter[F])
    * Accumulate up to `chunkSize` rows, interpreting rows as type `A`, mapping into `B`, into a
    * collection `C`, using `CanBuildFrom`, which is very fast.
    */
+  @SuppressWarnings(Array("org.wartremover.warts.ToString"))
   def chunkMap[C[_], A, B](chunkSize: Long, f: A => B)(
     implicit ca: Read[A],
              sf: Sync[F],
             cbf: CanBuildFrom[Nothing, B, C[B]]
   ): F[C[B]] =
-    sf.delay(Console.println(s"ResultSet.chunkMap: reading $chunkSize (max)")) *>
     raw.flatMap { rs =>
-      sf.delay {
-        @tailrec
-        def go(accum: Builder[B, C[B]], n: Long): C[B] =
-          if (n > 0 && rs.next) {
-            val b = f(ca.unsafeGet(rs, 1))
-            go(accum += b, n - 1)
-          } else accum.result
-        go(cbf(), chunkSize)
+      interp.rts.block.use { _ =>
+        sf.delay {
+
+          if (interp.log.isTraceEnabled) {
+            val types = ca.gets.map { case (g, _) =>
+              g.typeStack.reverse.map(_.getOrElse("«unknown»")).toList.mkString(" -> ")
+            }
+            interp.log.trace(s"ResultSet.chunkMap($chunkSize) of ${types.mkString(", ")}")
+          }
+
+          @tailrec
+          def go(accum: Builder[B, C[B]], n: Long): C[B] =
+            if (n > 0 && rs.next) {
+              val b = f(ca.unsafeGet(rs, 1))
+              go(accum += b, n - 1)
+            } else accum.result
+          go(cbf(), chunkSize)
+        }
       }
     }
 

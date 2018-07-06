@@ -6,14 +6,13 @@ package doobie.tagless.sync
 
 import cats.effect.Sync
 import cats.implicits._
-import cats.syntax._
 import doobie.tagless.jdbc._
 import java.lang.String
 import java.sql.Connection
 import java.sql.Driver
 import java.sql.DriverPropertyInfo
 import java.util.Properties
-import java.util.logging.Logger
+import java.util.logging.{ Logger => JdkLogger }
 
 /**
  * Implementation of JdbcDriver that wraps a Driver and lifts its primitive operations into any F
@@ -22,32 +21,32 @@ import java.util.logging.Logger
 @SuppressWarnings(Array("org.wartremover.warts.Overloading"))
 class SyncDriver[F[_]](value: Driver)(implicit F: Sync[F]) extends JdbcDriver[F] {
 
-  def acceptsURL(a: String) =
-    F.delay(Console.err.println(s"Driver.acceptsURL($a)")) *>
+  def acceptsURL(a: String): F[Boolean] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: Driver.acceptsURL($a)")) *>
     F.delay(value.acceptsURL(a))
 
-  def connect(a: String, b: Properties) =
-    F.delay(Console.err.println(s"Driver.connect($a, $b)")) *>
+  def connect(a: String, b: Properties): F[Connection] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: Driver.connect($a, $b)")) *>
     F.delay(value.connect(a, b))
 
-  def getMajorVersion =
-    F.delay(Console.err.println("Driver.getMajorVersion()")) *>
+  val getMajorVersion: F[Int] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: Driver.getMajorVersion()")) *>
     F.delay(value.getMajorVersion())
 
-  def getMinorVersion =
-    F.delay(Console.err.println("Driver.getMinorVersion()")) *>
+  val getMinorVersion: F[Int] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: Driver.getMinorVersion()")) *>
     F.delay(value.getMinorVersion())
 
-  def getParentLogger =
-    F.delay(Console.err.println("Driver.getParentLogger()")) *>
+  val getParentLogger: F[JdkLogger] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: Driver.getParentLogger()")) *>
     F.delay(value.getParentLogger())
 
-  def getPropertyInfo(a: String, b: Properties) =
-    F.delay(Console.err.println(s"Driver.getPropertyInfo($a, $b)")) *>
+  def getPropertyInfo(a: String, b: Properties): F[Array[DriverPropertyInfo]] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: Driver.getPropertyInfo($a, $b)")) *>
     F.delay(value.getPropertyInfo(a, b))
 
-  def jdbcCompliant =
-    F.delay(Console.err.println("Driver.jdbcCompliant()")) *>
+  val jdbcCompliant: F[Boolean] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: Driver.jdbcCompliant()")) *>
     F.delay(value.jdbcCompliant())
 
 }

@@ -6,7 +6,6 @@ package doobie.tagless.sync
 
 import cats.effect.Sync
 import cats.implicits._
-import cats.syntax._
 import doobie.tagless.jdbc._
 import java.lang.Class
 import java.lang.String
@@ -22,716 +21,716 @@ import java.sql.RowIdLifetime
 @SuppressWarnings(Array("org.wartremover.warts.Overloading"))
 class SyncDatabaseMetaData[F[_]](value: DatabaseMetaData)(implicit F: Sync[F]) extends JdbcDatabaseMetaData[F] {
 
-  def allProceduresAreCallable =
-    F.delay(Console.err.println("DatabaseMetaData.allProceduresAreCallable()")) *>
+  val allProceduresAreCallable: F[Boolean] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: DatabaseMetaData.allProceduresAreCallable()")) *>
     F.delay(value.allProceduresAreCallable())
 
-  def allTablesAreSelectable =
-    F.delay(Console.err.println("DatabaseMetaData.allTablesAreSelectable()")) *>
+  val allTablesAreSelectable: F[Boolean] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: DatabaseMetaData.allTablesAreSelectable()")) *>
     F.delay(value.allTablesAreSelectable())
 
-  def autoCommitFailureClosesAllResultSets =
-    F.delay(Console.err.println("DatabaseMetaData.autoCommitFailureClosesAllResultSets()")) *>
+  val autoCommitFailureClosesAllResultSets: F[Boolean] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: DatabaseMetaData.autoCommitFailureClosesAllResultSets()")) *>
     F.delay(value.autoCommitFailureClosesAllResultSets())
 
-  def dataDefinitionCausesTransactionCommit =
-    F.delay(Console.err.println("DatabaseMetaData.dataDefinitionCausesTransactionCommit()")) *>
+  val dataDefinitionCausesTransactionCommit: F[Boolean] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: DatabaseMetaData.dataDefinitionCausesTransactionCommit()")) *>
     F.delay(value.dataDefinitionCausesTransactionCommit())
 
-  def dataDefinitionIgnoredInTransactions =
-    F.delay(Console.err.println("DatabaseMetaData.dataDefinitionIgnoredInTransactions()")) *>
+  val dataDefinitionIgnoredInTransactions: F[Boolean] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: DatabaseMetaData.dataDefinitionIgnoredInTransactions()")) *>
     F.delay(value.dataDefinitionIgnoredInTransactions())
 
-  def deletesAreDetected(a: Int) =
-    F.delay(Console.err.println(s"DatabaseMetaData.deletesAreDetected($a)")) *>
+  def deletesAreDetected(a: Int): F[Boolean] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: DatabaseMetaData.deletesAreDetected($a)")) *>
     F.delay(value.deletesAreDetected(a))
 
-  def doesMaxRowSizeIncludeBlobs =
-    F.delay(Console.err.println("DatabaseMetaData.doesMaxRowSizeIncludeBlobs()")) *>
+  val doesMaxRowSizeIncludeBlobs: F[Boolean] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: DatabaseMetaData.doesMaxRowSizeIncludeBlobs()")) *>
     F.delay(value.doesMaxRowSizeIncludeBlobs())
 
-  def generatedKeyAlwaysReturned =
-    F.delay(Console.err.println("DatabaseMetaData.generatedKeyAlwaysReturned()")) *>
+  val generatedKeyAlwaysReturned: F[Boolean] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: DatabaseMetaData.generatedKeyAlwaysReturned()")) *>
     F.delay(value.generatedKeyAlwaysReturned())
 
-  def getAttributes(a: String, b: String, c: String, d: String) =
-    F.delay(Console.err.println(s"DatabaseMetaData.getAttributes($a, $b, $c, $d)")) *>
+  def getAttributes(a: String, b: String, c: String, d: String): F[ResultSet] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: DatabaseMetaData.getAttributes($a, $b, $c, $d)")) *>
     F.delay(value.getAttributes(a, b, c, d))
 
-  def getBestRowIdentifier(a: String, b: String, c: String, d: Int, e: Boolean) =
-    F.delay(Console.err.println(s"DatabaseMetaData.getBestRowIdentifier($a, $b, $c, $d, $e)")) *>
+  def getBestRowIdentifier(a: String, b: String, c: String, d: Int, e: Boolean): F[ResultSet] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: DatabaseMetaData.getBestRowIdentifier($a, $b, $c, $d, $e)")) *>
     F.delay(value.getBestRowIdentifier(a, b, c, d, e))
 
-  def getCatalogSeparator =
-    F.delay(Console.err.println("DatabaseMetaData.getCatalogSeparator()")) *>
+  val getCatalogSeparator: F[String] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: DatabaseMetaData.getCatalogSeparator()")) *>
     F.delay(value.getCatalogSeparator())
 
-  def getCatalogTerm =
-    F.delay(Console.err.println("DatabaseMetaData.getCatalogTerm()")) *>
+  val getCatalogTerm: F[String] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: DatabaseMetaData.getCatalogTerm()")) *>
     F.delay(value.getCatalogTerm())
 
-  def getCatalogs =
-    F.delay(Console.err.println("DatabaseMetaData.getCatalogs()")) *>
+  val getCatalogs: F[ResultSet] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: DatabaseMetaData.getCatalogs()")) *>
     F.delay(value.getCatalogs())
 
-  def getClientInfoProperties =
-    F.delay(Console.err.println("DatabaseMetaData.getClientInfoProperties()")) *>
+  val getClientInfoProperties: F[ResultSet] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: DatabaseMetaData.getClientInfoProperties()")) *>
     F.delay(value.getClientInfoProperties())
 
-  def getColumnPrivileges(a: String, b: String, c: String, d: String) =
-    F.delay(Console.err.println(s"DatabaseMetaData.getColumnPrivileges($a, $b, $c, $d)")) *>
+  def getColumnPrivileges(a: String, b: String, c: String, d: String): F[ResultSet] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: DatabaseMetaData.getColumnPrivileges($a, $b, $c, $d)")) *>
     F.delay(value.getColumnPrivileges(a, b, c, d))
 
-  def getColumns(a: String, b: String, c: String, d: String) =
-    F.delay(Console.err.println(s"DatabaseMetaData.getColumns($a, $b, $c, $d)")) *>
+  def getColumns(a: String, b: String, c: String, d: String): F[ResultSet] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: DatabaseMetaData.getColumns($a, $b, $c, $d)")) *>
     F.delay(value.getColumns(a, b, c, d))
 
-  def getConnection =
-    F.delay(Console.err.println("DatabaseMetaData.getConnection()")) *>
+  val getConnection: F[Connection] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: DatabaseMetaData.getConnection()")) *>
     F.delay(value.getConnection())
 
-  def getCrossReference(a: String, b: String, c: String, d: String, e: String, f: String) =
-    F.delay(Console.err.println(s"DatabaseMetaData.getCrossReference($a, $b, $c, $d, $e, $f)")) *>
+  def getCrossReference(a: String, b: String, c: String, d: String, e: String, f: String): F[ResultSet] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: DatabaseMetaData.getCrossReference($a, $b, $c, $d, $e, $f)")) *>
     F.delay(value.getCrossReference(a, b, c, d, e, f))
 
-  def getDatabaseMajorVersion =
-    F.delay(Console.err.println("DatabaseMetaData.getDatabaseMajorVersion()")) *>
+  val getDatabaseMajorVersion: F[Int] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: DatabaseMetaData.getDatabaseMajorVersion()")) *>
     F.delay(value.getDatabaseMajorVersion())
 
-  def getDatabaseMinorVersion =
-    F.delay(Console.err.println("DatabaseMetaData.getDatabaseMinorVersion()")) *>
+  val getDatabaseMinorVersion: F[Int] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: DatabaseMetaData.getDatabaseMinorVersion()")) *>
     F.delay(value.getDatabaseMinorVersion())
 
-  def getDatabaseProductName =
-    F.delay(Console.err.println("DatabaseMetaData.getDatabaseProductName()")) *>
+  val getDatabaseProductName: F[String] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: DatabaseMetaData.getDatabaseProductName()")) *>
     F.delay(value.getDatabaseProductName())
 
-  def getDatabaseProductVersion =
-    F.delay(Console.err.println("DatabaseMetaData.getDatabaseProductVersion()")) *>
+  val getDatabaseProductVersion: F[String] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: DatabaseMetaData.getDatabaseProductVersion()")) *>
     F.delay(value.getDatabaseProductVersion())
 
-  def getDefaultTransactionIsolation =
-    F.delay(Console.err.println("DatabaseMetaData.getDefaultTransactionIsolation()")) *>
+  val getDefaultTransactionIsolation: F[Int] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: DatabaseMetaData.getDefaultTransactionIsolation()")) *>
     F.delay(value.getDefaultTransactionIsolation())
 
-  def getDriverMajorVersion =
-    F.delay(Console.err.println("DatabaseMetaData.getDriverMajorVersion()")) *>
+  val getDriverMajorVersion: F[Int] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: DatabaseMetaData.getDriverMajorVersion()")) *>
     F.delay(value.getDriverMajorVersion())
 
-  def getDriverMinorVersion =
-    F.delay(Console.err.println("DatabaseMetaData.getDriverMinorVersion()")) *>
+  val getDriverMinorVersion: F[Int] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: DatabaseMetaData.getDriverMinorVersion()")) *>
     F.delay(value.getDriverMinorVersion())
 
-  def getDriverName =
-    F.delay(Console.err.println("DatabaseMetaData.getDriverName()")) *>
+  val getDriverName: F[String] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: DatabaseMetaData.getDriverName()")) *>
     F.delay(value.getDriverName())
 
-  def getDriverVersion =
-    F.delay(Console.err.println("DatabaseMetaData.getDriverVersion()")) *>
+  val getDriverVersion: F[String] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: DatabaseMetaData.getDriverVersion()")) *>
     F.delay(value.getDriverVersion())
 
-  def getExportedKeys(a: String, b: String, c: String) =
-    F.delay(Console.err.println(s"DatabaseMetaData.getExportedKeys($a, $b, $c)")) *>
+  def getExportedKeys(a: String, b: String, c: String): F[ResultSet] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: DatabaseMetaData.getExportedKeys($a, $b, $c)")) *>
     F.delay(value.getExportedKeys(a, b, c))
 
-  def getExtraNameCharacters =
-    F.delay(Console.err.println("DatabaseMetaData.getExtraNameCharacters()")) *>
+  val getExtraNameCharacters: F[String] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: DatabaseMetaData.getExtraNameCharacters()")) *>
     F.delay(value.getExtraNameCharacters())
 
-  def getFunctionColumns(a: String, b: String, c: String, d: String) =
-    F.delay(Console.err.println(s"DatabaseMetaData.getFunctionColumns($a, $b, $c, $d)")) *>
+  def getFunctionColumns(a: String, b: String, c: String, d: String): F[ResultSet] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: DatabaseMetaData.getFunctionColumns($a, $b, $c, $d)")) *>
     F.delay(value.getFunctionColumns(a, b, c, d))
 
-  def getFunctions(a: String, b: String, c: String) =
-    F.delay(Console.err.println(s"DatabaseMetaData.getFunctions($a, $b, $c)")) *>
+  def getFunctions(a: String, b: String, c: String): F[ResultSet] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: DatabaseMetaData.getFunctions($a, $b, $c)")) *>
     F.delay(value.getFunctions(a, b, c))
 
-  def getIdentifierQuoteString =
-    F.delay(Console.err.println("DatabaseMetaData.getIdentifierQuoteString()")) *>
+  val getIdentifierQuoteString: F[String] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: DatabaseMetaData.getIdentifierQuoteString()")) *>
     F.delay(value.getIdentifierQuoteString())
 
-  def getImportedKeys(a: String, b: String, c: String) =
-    F.delay(Console.err.println(s"DatabaseMetaData.getImportedKeys($a, $b, $c)")) *>
+  def getImportedKeys(a: String, b: String, c: String): F[ResultSet] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: DatabaseMetaData.getImportedKeys($a, $b, $c)")) *>
     F.delay(value.getImportedKeys(a, b, c))
 
-  def getIndexInfo(a: String, b: String, c: String, d: Boolean, e: Boolean) =
-    F.delay(Console.err.println(s"DatabaseMetaData.getIndexInfo($a, $b, $c, $d, $e)")) *>
+  def getIndexInfo(a: String, b: String, c: String, d: Boolean, e: Boolean): F[ResultSet] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: DatabaseMetaData.getIndexInfo($a, $b, $c, $d, $e)")) *>
     F.delay(value.getIndexInfo(a, b, c, d, e))
 
-  def getJDBCMajorVersion =
-    F.delay(Console.err.println("DatabaseMetaData.getJDBCMajorVersion()")) *>
+  val getJDBCMajorVersion: F[Int] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: DatabaseMetaData.getJDBCMajorVersion()")) *>
     F.delay(value.getJDBCMajorVersion())
 
-  def getJDBCMinorVersion =
-    F.delay(Console.err.println("DatabaseMetaData.getJDBCMinorVersion()")) *>
+  val getJDBCMinorVersion: F[Int] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: DatabaseMetaData.getJDBCMinorVersion()")) *>
     F.delay(value.getJDBCMinorVersion())
 
-  def getMaxBinaryLiteralLength =
-    F.delay(Console.err.println("DatabaseMetaData.getMaxBinaryLiteralLength()")) *>
+  val getMaxBinaryLiteralLength: F[Int] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: DatabaseMetaData.getMaxBinaryLiteralLength()")) *>
     F.delay(value.getMaxBinaryLiteralLength())
 
-  def getMaxCatalogNameLength =
-    F.delay(Console.err.println("DatabaseMetaData.getMaxCatalogNameLength()")) *>
+  val getMaxCatalogNameLength: F[Int] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: DatabaseMetaData.getMaxCatalogNameLength()")) *>
     F.delay(value.getMaxCatalogNameLength())
 
-  def getMaxCharLiteralLength =
-    F.delay(Console.err.println("DatabaseMetaData.getMaxCharLiteralLength()")) *>
+  val getMaxCharLiteralLength: F[Int] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: DatabaseMetaData.getMaxCharLiteralLength()")) *>
     F.delay(value.getMaxCharLiteralLength())
 
-  def getMaxColumnNameLength =
-    F.delay(Console.err.println("DatabaseMetaData.getMaxColumnNameLength()")) *>
+  val getMaxColumnNameLength: F[Int] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: DatabaseMetaData.getMaxColumnNameLength()")) *>
     F.delay(value.getMaxColumnNameLength())
 
-  def getMaxColumnsInGroupBy =
-    F.delay(Console.err.println("DatabaseMetaData.getMaxColumnsInGroupBy()")) *>
+  val getMaxColumnsInGroupBy: F[Int] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: DatabaseMetaData.getMaxColumnsInGroupBy()")) *>
     F.delay(value.getMaxColumnsInGroupBy())
 
-  def getMaxColumnsInIndex =
-    F.delay(Console.err.println("DatabaseMetaData.getMaxColumnsInIndex()")) *>
+  val getMaxColumnsInIndex: F[Int] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: DatabaseMetaData.getMaxColumnsInIndex()")) *>
     F.delay(value.getMaxColumnsInIndex())
 
-  def getMaxColumnsInOrderBy =
-    F.delay(Console.err.println("DatabaseMetaData.getMaxColumnsInOrderBy()")) *>
+  val getMaxColumnsInOrderBy: F[Int] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: DatabaseMetaData.getMaxColumnsInOrderBy()")) *>
     F.delay(value.getMaxColumnsInOrderBy())
 
-  def getMaxColumnsInSelect =
-    F.delay(Console.err.println("DatabaseMetaData.getMaxColumnsInSelect()")) *>
+  val getMaxColumnsInSelect: F[Int] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: DatabaseMetaData.getMaxColumnsInSelect()")) *>
     F.delay(value.getMaxColumnsInSelect())
 
-  def getMaxColumnsInTable =
-    F.delay(Console.err.println("DatabaseMetaData.getMaxColumnsInTable()")) *>
+  val getMaxColumnsInTable: F[Int] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: DatabaseMetaData.getMaxColumnsInTable()")) *>
     F.delay(value.getMaxColumnsInTable())
 
-  def getMaxConnections =
-    F.delay(Console.err.println("DatabaseMetaData.getMaxConnections()")) *>
+  val getMaxConnections: F[Int] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: DatabaseMetaData.getMaxConnections()")) *>
     F.delay(value.getMaxConnections())
 
-  def getMaxCursorNameLength =
-    F.delay(Console.err.println("DatabaseMetaData.getMaxCursorNameLength()")) *>
+  val getMaxCursorNameLength: F[Int] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: DatabaseMetaData.getMaxCursorNameLength()")) *>
     F.delay(value.getMaxCursorNameLength())
 
-  def getMaxIndexLength =
-    F.delay(Console.err.println("DatabaseMetaData.getMaxIndexLength()")) *>
+  val getMaxIndexLength: F[Int] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: DatabaseMetaData.getMaxIndexLength()")) *>
     F.delay(value.getMaxIndexLength())
 
-  def getMaxLogicalLobSize =
-    F.delay(Console.err.println("DatabaseMetaData.getMaxLogicalLobSize()")) *>
+  val getMaxLogicalLobSize: F[Long] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: DatabaseMetaData.getMaxLogicalLobSize()")) *>
     F.delay(value.getMaxLogicalLobSize())
 
-  def getMaxProcedureNameLength =
-    F.delay(Console.err.println("DatabaseMetaData.getMaxProcedureNameLength()")) *>
+  val getMaxProcedureNameLength: F[Int] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: DatabaseMetaData.getMaxProcedureNameLength()")) *>
     F.delay(value.getMaxProcedureNameLength())
 
-  def getMaxRowSize =
-    F.delay(Console.err.println("DatabaseMetaData.getMaxRowSize()")) *>
+  val getMaxRowSize: F[Int] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: DatabaseMetaData.getMaxRowSize()")) *>
     F.delay(value.getMaxRowSize())
 
-  def getMaxSchemaNameLength =
-    F.delay(Console.err.println("DatabaseMetaData.getMaxSchemaNameLength()")) *>
+  val getMaxSchemaNameLength: F[Int] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: DatabaseMetaData.getMaxSchemaNameLength()")) *>
     F.delay(value.getMaxSchemaNameLength())
 
-  def getMaxStatementLength =
-    F.delay(Console.err.println("DatabaseMetaData.getMaxStatementLength()")) *>
+  val getMaxStatementLength: F[Int] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: DatabaseMetaData.getMaxStatementLength()")) *>
     F.delay(value.getMaxStatementLength())
 
-  def getMaxStatements =
-    F.delay(Console.err.println("DatabaseMetaData.getMaxStatements()")) *>
+  val getMaxStatements: F[Int] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: DatabaseMetaData.getMaxStatements()")) *>
     F.delay(value.getMaxStatements())
 
-  def getMaxTableNameLength =
-    F.delay(Console.err.println("DatabaseMetaData.getMaxTableNameLength()")) *>
+  val getMaxTableNameLength: F[Int] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: DatabaseMetaData.getMaxTableNameLength()")) *>
     F.delay(value.getMaxTableNameLength())
 
-  def getMaxTablesInSelect =
-    F.delay(Console.err.println("DatabaseMetaData.getMaxTablesInSelect()")) *>
+  val getMaxTablesInSelect: F[Int] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: DatabaseMetaData.getMaxTablesInSelect()")) *>
     F.delay(value.getMaxTablesInSelect())
 
-  def getMaxUserNameLength =
-    F.delay(Console.err.println("DatabaseMetaData.getMaxUserNameLength()")) *>
+  val getMaxUserNameLength: F[Int] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: DatabaseMetaData.getMaxUserNameLength()")) *>
     F.delay(value.getMaxUserNameLength())
 
-  def getNumericFunctions =
-    F.delay(Console.err.println("DatabaseMetaData.getNumericFunctions()")) *>
+  val getNumericFunctions: F[String] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: DatabaseMetaData.getNumericFunctions()")) *>
     F.delay(value.getNumericFunctions())
 
-  def getPrimaryKeys(a: String, b: String, c: String) =
-    F.delay(Console.err.println(s"DatabaseMetaData.getPrimaryKeys($a, $b, $c)")) *>
+  def getPrimaryKeys(a: String, b: String, c: String): F[ResultSet] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: DatabaseMetaData.getPrimaryKeys($a, $b, $c)")) *>
     F.delay(value.getPrimaryKeys(a, b, c))
 
-  def getProcedureColumns(a: String, b: String, c: String, d: String) =
-    F.delay(Console.err.println(s"DatabaseMetaData.getProcedureColumns($a, $b, $c, $d)")) *>
+  def getProcedureColumns(a: String, b: String, c: String, d: String): F[ResultSet] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: DatabaseMetaData.getProcedureColumns($a, $b, $c, $d)")) *>
     F.delay(value.getProcedureColumns(a, b, c, d))
 
-  def getProcedureTerm =
-    F.delay(Console.err.println("DatabaseMetaData.getProcedureTerm()")) *>
+  val getProcedureTerm: F[String] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: DatabaseMetaData.getProcedureTerm()")) *>
     F.delay(value.getProcedureTerm())
 
-  def getProcedures(a: String, b: String, c: String) =
-    F.delay(Console.err.println(s"DatabaseMetaData.getProcedures($a, $b, $c)")) *>
+  def getProcedures(a: String, b: String, c: String): F[ResultSet] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: DatabaseMetaData.getProcedures($a, $b, $c)")) *>
     F.delay(value.getProcedures(a, b, c))
 
-  def getPseudoColumns(a: String, b: String, c: String, d: String) =
-    F.delay(Console.err.println(s"DatabaseMetaData.getPseudoColumns($a, $b, $c, $d)")) *>
+  def getPseudoColumns(a: String, b: String, c: String, d: String): F[ResultSet] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: DatabaseMetaData.getPseudoColumns($a, $b, $c, $d)")) *>
     F.delay(value.getPseudoColumns(a, b, c, d))
 
-  def getResultSetHoldability =
-    F.delay(Console.err.println("DatabaseMetaData.getResultSetHoldability()")) *>
+  val getResultSetHoldability: F[Int] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: DatabaseMetaData.getResultSetHoldability()")) *>
     F.delay(value.getResultSetHoldability())
 
-  def getRowIdLifetime =
-    F.delay(Console.err.println("DatabaseMetaData.getRowIdLifetime()")) *>
+  val getRowIdLifetime: F[RowIdLifetime] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: DatabaseMetaData.getRowIdLifetime()")) *>
     F.delay(value.getRowIdLifetime())
 
-  def getSQLKeywords =
-    F.delay(Console.err.println("DatabaseMetaData.getSQLKeywords()")) *>
+  val getSQLKeywords: F[String] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: DatabaseMetaData.getSQLKeywords()")) *>
     F.delay(value.getSQLKeywords())
 
-  def getSQLStateType =
-    F.delay(Console.err.println("DatabaseMetaData.getSQLStateType()")) *>
+  val getSQLStateType: F[Int] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: DatabaseMetaData.getSQLStateType()")) *>
     F.delay(value.getSQLStateType())
 
-  def getSchemaTerm =
-    F.delay(Console.err.println("DatabaseMetaData.getSchemaTerm()")) *>
+  val getSchemaTerm: F[String] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: DatabaseMetaData.getSchemaTerm()")) *>
     F.delay(value.getSchemaTerm())
 
-  def getSchemas =
-    F.delay(Console.err.println("DatabaseMetaData.getSchemas()")) *>
+  val getSchemas: F[ResultSet] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: DatabaseMetaData.getSchemas()")) *>
     F.delay(value.getSchemas())
 
-  def getSchemas(a: String, b: String) =
-    F.delay(Console.err.println(s"DatabaseMetaData.getSchemas($a, $b)")) *>
+  def getSchemas(a: String, b: String): F[ResultSet] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: DatabaseMetaData.getSchemas($a, $b)")) *>
     F.delay(value.getSchemas(a, b))
 
-  def getSearchStringEscape =
-    F.delay(Console.err.println("DatabaseMetaData.getSearchStringEscape()")) *>
+  val getSearchStringEscape: F[String] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: DatabaseMetaData.getSearchStringEscape()")) *>
     F.delay(value.getSearchStringEscape())
 
-  def getStringFunctions =
-    F.delay(Console.err.println("DatabaseMetaData.getStringFunctions()")) *>
+  val getStringFunctions: F[String] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: DatabaseMetaData.getStringFunctions()")) *>
     F.delay(value.getStringFunctions())
 
-  def getSuperTables(a: String, b: String, c: String) =
-    F.delay(Console.err.println(s"DatabaseMetaData.getSuperTables($a, $b, $c)")) *>
+  def getSuperTables(a: String, b: String, c: String): F[ResultSet] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: DatabaseMetaData.getSuperTables($a, $b, $c)")) *>
     F.delay(value.getSuperTables(a, b, c))
 
-  def getSuperTypes(a: String, b: String, c: String) =
-    F.delay(Console.err.println(s"DatabaseMetaData.getSuperTypes($a, $b, $c)")) *>
+  def getSuperTypes(a: String, b: String, c: String): F[ResultSet] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: DatabaseMetaData.getSuperTypes($a, $b, $c)")) *>
     F.delay(value.getSuperTypes(a, b, c))
 
-  def getSystemFunctions =
-    F.delay(Console.err.println("DatabaseMetaData.getSystemFunctions()")) *>
+  val getSystemFunctions: F[String] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: DatabaseMetaData.getSystemFunctions()")) *>
     F.delay(value.getSystemFunctions())
 
-  def getTablePrivileges(a: String, b: String, c: String) =
-    F.delay(Console.err.println(s"DatabaseMetaData.getTablePrivileges($a, $b, $c)")) *>
+  def getTablePrivileges(a: String, b: String, c: String): F[ResultSet] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: DatabaseMetaData.getTablePrivileges($a, $b, $c)")) *>
     F.delay(value.getTablePrivileges(a, b, c))
 
-  def getTableTypes =
-    F.delay(Console.err.println("DatabaseMetaData.getTableTypes()")) *>
+  val getTableTypes: F[ResultSet] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: DatabaseMetaData.getTableTypes()")) *>
     F.delay(value.getTableTypes())
 
-  def getTables(a: String, b: String, c: String, d: Array[String]) =
-    F.delay(Console.err.println(s"DatabaseMetaData.getTables($a, $b, $c, $d)")) *>
+  def getTables(a: String, b: String, c: String, d: Array[String]): F[ResultSet] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: DatabaseMetaData.getTables($a, $b, $c, $d)")) *>
     F.delay(value.getTables(a, b, c, d))
 
-  def getTimeDateFunctions =
-    F.delay(Console.err.println("DatabaseMetaData.getTimeDateFunctions()")) *>
+  val getTimeDateFunctions: F[String] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: DatabaseMetaData.getTimeDateFunctions()")) *>
     F.delay(value.getTimeDateFunctions())
 
-  def getTypeInfo =
-    F.delay(Console.err.println("DatabaseMetaData.getTypeInfo()")) *>
+  val getTypeInfo: F[ResultSet] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: DatabaseMetaData.getTypeInfo()")) *>
     F.delay(value.getTypeInfo())
 
-  def getUDTs(a: String, b: String, c: String, d: Array[Int]) =
-    F.delay(Console.err.println(s"DatabaseMetaData.getUDTs($a, $b, $c, $d)")) *>
+  def getUDTs(a: String, b: String, c: String, d: Array[Int]): F[ResultSet] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: DatabaseMetaData.getUDTs($a, $b, $c, $d)")) *>
     F.delay(value.getUDTs(a, b, c, d))
 
-  def getURL =
-    F.delay(Console.err.println("DatabaseMetaData.getURL()")) *>
+  val getURL: F[String] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: DatabaseMetaData.getURL()")) *>
     F.delay(value.getURL())
 
-  def getUserName =
-    F.delay(Console.err.println("DatabaseMetaData.getUserName()")) *>
+  val getUserName: F[String] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: DatabaseMetaData.getUserName()")) *>
     F.delay(value.getUserName())
 
-  def getVersionColumns(a: String, b: String, c: String) =
-    F.delay(Console.err.println(s"DatabaseMetaData.getVersionColumns($a, $b, $c)")) *>
+  def getVersionColumns(a: String, b: String, c: String): F[ResultSet] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: DatabaseMetaData.getVersionColumns($a, $b, $c)")) *>
     F.delay(value.getVersionColumns(a, b, c))
 
-  def insertsAreDetected(a: Int) =
-    F.delay(Console.err.println(s"DatabaseMetaData.insertsAreDetected($a)")) *>
+  def insertsAreDetected(a: Int): F[Boolean] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: DatabaseMetaData.insertsAreDetected($a)")) *>
     F.delay(value.insertsAreDetected(a))
 
-  def isCatalogAtStart =
-    F.delay(Console.err.println("DatabaseMetaData.isCatalogAtStart()")) *>
+  val isCatalogAtStart: F[Boolean] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: DatabaseMetaData.isCatalogAtStart()")) *>
     F.delay(value.isCatalogAtStart())
 
-  def isReadOnly =
-    F.delay(Console.err.println("DatabaseMetaData.isReadOnly()")) *>
+  val isReadOnly: F[Boolean] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: DatabaseMetaData.isReadOnly()")) *>
     F.delay(value.isReadOnly())
 
-  def isWrapperFor(a: Class[_]) =
-    F.delay(Console.err.println(s"DatabaseMetaData.isWrapperFor($a)")) *>
+  def isWrapperFor(a: Class[_]): F[Boolean] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: DatabaseMetaData.isWrapperFor($a)")) *>
     F.delay(value.isWrapperFor(a))
 
-  def locatorsUpdateCopy =
-    F.delay(Console.err.println("DatabaseMetaData.locatorsUpdateCopy()")) *>
+  val locatorsUpdateCopy: F[Boolean] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: DatabaseMetaData.locatorsUpdateCopy()")) *>
     F.delay(value.locatorsUpdateCopy())
 
-  def nullPlusNonNullIsNull =
-    F.delay(Console.err.println("DatabaseMetaData.nullPlusNonNullIsNull()")) *>
+  val nullPlusNonNullIsNull: F[Boolean] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: DatabaseMetaData.nullPlusNonNullIsNull()")) *>
     F.delay(value.nullPlusNonNullIsNull())
 
-  def nullsAreSortedAtEnd =
-    F.delay(Console.err.println("DatabaseMetaData.nullsAreSortedAtEnd()")) *>
+  val nullsAreSortedAtEnd: F[Boolean] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: DatabaseMetaData.nullsAreSortedAtEnd()")) *>
     F.delay(value.nullsAreSortedAtEnd())
 
-  def nullsAreSortedAtStart =
-    F.delay(Console.err.println("DatabaseMetaData.nullsAreSortedAtStart()")) *>
+  val nullsAreSortedAtStart: F[Boolean] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: DatabaseMetaData.nullsAreSortedAtStart()")) *>
     F.delay(value.nullsAreSortedAtStart())
 
-  def nullsAreSortedHigh =
-    F.delay(Console.err.println("DatabaseMetaData.nullsAreSortedHigh()")) *>
+  val nullsAreSortedHigh: F[Boolean] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: DatabaseMetaData.nullsAreSortedHigh()")) *>
     F.delay(value.nullsAreSortedHigh())
 
-  def nullsAreSortedLow =
-    F.delay(Console.err.println("DatabaseMetaData.nullsAreSortedLow()")) *>
+  val nullsAreSortedLow: F[Boolean] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: DatabaseMetaData.nullsAreSortedLow()")) *>
     F.delay(value.nullsAreSortedLow())
 
-  def othersDeletesAreVisible(a: Int) =
-    F.delay(Console.err.println(s"DatabaseMetaData.othersDeletesAreVisible($a)")) *>
+  def othersDeletesAreVisible(a: Int): F[Boolean] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: DatabaseMetaData.othersDeletesAreVisible($a)")) *>
     F.delay(value.othersDeletesAreVisible(a))
 
-  def othersInsertsAreVisible(a: Int) =
-    F.delay(Console.err.println(s"DatabaseMetaData.othersInsertsAreVisible($a)")) *>
+  def othersInsertsAreVisible(a: Int): F[Boolean] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: DatabaseMetaData.othersInsertsAreVisible($a)")) *>
     F.delay(value.othersInsertsAreVisible(a))
 
-  def othersUpdatesAreVisible(a: Int) =
-    F.delay(Console.err.println(s"DatabaseMetaData.othersUpdatesAreVisible($a)")) *>
+  def othersUpdatesAreVisible(a: Int): F[Boolean] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: DatabaseMetaData.othersUpdatesAreVisible($a)")) *>
     F.delay(value.othersUpdatesAreVisible(a))
 
-  def ownDeletesAreVisible(a: Int) =
-    F.delay(Console.err.println(s"DatabaseMetaData.ownDeletesAreVisible($a)")) *>
+  def ownDeletesAreVisible(a: Int): F[Boolean] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: DatabaseMetaData.ownDeletesAreVisible($a)")) *>
     F.delay(value.ownDeletesAreVisible(a))
 
-  def ownInsertsAreVisible(a: Int) =
-    F.delay(Console.err.println(s"DatabaseMetaData.ownInsertsAreVisible($a)")) *>
+  def ownInsertsAreVisible(a: Int): F[Boolean] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: DatabaseMetaData.ownInsertsAreVisible($a)")) *>
     F.delay(value.ownInsertsAreVisible(a))
 
-  def ownUpdatesAreVisible(a: Int) =
-    F.delay(Console.err.println(s"DatabaseMetaData.ownUpdatesAreVisible($a)")) *>
+  def ownUpdatesAreVisible(a: Int): F[Boolean] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: DatabaseMetaData.ownUpdatesAreVisible($a)")) *>
     F.delay(value.ownUpdatesAreVisible(a))
 
-  def storesLowerCaseIdentifiers =
-    F.delay(Console.err.println("DatabaseMetaData.storesLowerCaseIdentifiers()")) *>
+  val storesLowerCaseIdentifiers: F[Boolean] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: DatabaseMetaData.storesLowerCaseIdentifiers()")) *>
     F.delay(value.storesLowerCaseIdentifiers())
 
-  def storesLowerCaseQuotedIdentifiers =
-    F.delay(Console.err.println("DatabaseMetaData.storesLowerCaseQuotedIdentifiers()")) *>
+  val storesLowerCaseQuotedIdentifiers: F[Boolean] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: DatabaseMetaData.storesLowerCaseQuotedIdentifiers()")) *>
     F.delay(value.storesLowerCaseQuotedIdentifiers())
 
-  def storesMixedCaseIdentifiers =
-    F.delay(Console.err.println("DatabaseMetaData.storesMixedCaseIdentifiers()")) *>
+  val storesMixedCaseIdentifiers: F[Boolean] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: DatabaseMetaData.storesMixedCaseIdentifiers()")) *>
     F.delay(value.storesMixedCaseIdentifiers())
 
-  def storesMixedCaseQuotedIdentifiers =
-    F.delay(Console.err.println("DatabaseMetaData.storesMixedCaseQuotedIdentifiers()")) *>
+  val storesMixedCaseQuotedIdentifiers: F[Boolean] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: DatabaseMetaData.storesMixedCaseQuotedIdentifiers()")) *>
     F.delay(value.storesMixedCaseQuotedIdentifiers())
 
-  def storesUpperCaseIdentifiers =
-    F.delay(Console.err.println("DatabaseMetaData.storesUpperCaseIdentifiers()")) *>
+  val storesUpperCaseIdentifiers: F[Boolean] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: DatabaseMetaData.storesUpperCaseIdentifiers()")) *>
     F.delay(value.storesUpperCaseIdentifiers())
 
-  def storesUpperCaseQuotedIdentifiers =
-    F.delay(Console.err.println("DatabaseMetaData.storesUpperCaseQuotedIdentifiers()")) *>
+  val storesUpperCaseQuotedIdentifiers: F[Boolean] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: DatabaseMetaData.storesUpperCaseQuotedIdentifiers()")) *>
     F.delay(value.storesUpperCaseQuotedIdentifiers())
 
-  def supportsANSI92EntryLevelSQL =
-    F.delay(Console.err.println("DatabaseMetaData.supportsANSI92EntryLevelSQL()")) *>
+  val supportsANSI92EntryLevelSQL: F[Boolean] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: DatabaseMetaData.supportsANSI92EntryLevelSQL()")) *>
     F.delay(value.supportsANSI92EntryLevelSQL())
 
-  def supportsANSI92FullSQL =
-    F.delay(Console.err.println("DatabaseMetaData.supportsANSI92FullSQL()")) *>
+  val supportsANSI92FullSQL: F[Boolean] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: DatabaseMetaData.supportsANSI92FullSQL()")) *>
     F.delay(value.supportsANSI92FullSQL())
 
-  def supportsANSI92IntermediateSQL =
-    F.delay(Console.err.println("DatabaseMetaData.supportsANSI92IntermediateSQL()")) *>
+  val supportsANSI92IntermediateSQL: F[Boolean] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: DatabaseMetaData.supportsANSI92IntermediateSQL()")) *>
     F.delay(value.supportsANSI92IntermediateSQL())
 
-  def supportsAlterTableWithAddColumn =
-    F.delay(Console.err.println("DatabaseMetaData.supportsAlterTableWithAddColumn()")) *>
+  val supportsAlterTableWithAddColumn: F[Boolean] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: DatabaseMetaData.supportsAlterTableWithAddColumn()")) *>
     F.delay(value.supportsAlterTableWithAddColumn())
 
-  def supportsAlterTableWithDropColumn =
-    F.delay(Console.err.println("DatabaseMetaData.supportsAlterTableWithDropColumn()")) *>
+  val supportsAlterTableWithDropColumn: F[Boolean] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: DatabaseMetaData.supportsAlterTableWithDropColumn()")) *>
     F.delay(value.supportsAlterTableWithDropColumn())
 
-  def supportsBatchUpdates =
-    F.delay(Console.err.println("DatabaseMetaData.supportsBatchUpdates()")) *>
+  val supportsBatchUpdates: F[Boolean] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: DatabaseMetaData.supportsBatchUpdates()")) *>
     F.delay(value.supportsBatchUpdates())
 
-  def supportsCatalogsInDataManipulation =
-    F.delay(Console.err.println("DatabaseMetaData.supportsCatalogsInDataManipulation()")) *>
+  val supportsCatalogsInDataManipulation: F[Boolean] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: DatabaseMetaData.supportsCatalogsInDataManipulation()")) *>
     F.delay(value.supportsCatalogsInDataManipulation())
 
-  def supportsCatalogsInIndexDefinitions =
-    F.delay(Console.err.println("DatabaseMetaData.supportsCatalogsInIndexDefinitions()")) *>
+  val supportsCatalogsInIndexDefinitions: F[Boolean] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: DatabaseMetaData.supportsCatalogsInIndexDefinitions()")) *>
     F.delay(value.supportsCatalogsInIndexDefinitions())
 
-  def supportsCatalogsInPrivilegeDefinitions =
-    F.delay(Console.err.println("DatabaseMetaData.supportsCatalogsInPrivilegeDefinitions()")) *>
+  val supportsCatalogsInPrivilegeDefinitions: F[Boolean] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: DatabaseMetaData.supportsCatalogsInPrivilegeDefinitions()")) *>
     F.delay(value.supportsCatalogsInPrivilegeDefinitions())
 
-  def supportsCatalogsInProcedureCalls =
-    F.delay(Console.err.println("DatabaseMetaData.supportsCatalogsInProcedureCalls()")) *>
+  val supportsCatalogsInProcedureCalls: F[Boolean] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: DatabaseMetaData.supportsCatalogsInProcedureCalls()")) *>
     F.delay(value.supportsCatalogsInProcedureCalls())
 
-  def supportsCatalogsInTableDefinitions =
-    F.delay(Console.err.println("DatabaseMetaData.supportsCatalogsInTableDefinitions()")) *>
+  val supportsCatalogsInTableDefinitions: F[Boolean] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: DatabaseMetaData.supportsCatalogsInTableDefinitions()")) *>
     F.delay(value.supportsCatalogsInTableDefinitions())
 
-  def supportsColumnAliasing =
-    F.delay(Console.err.println("DatabaseMetaData.supportsColumnAliasing()")) *>
+  val supportsColumnAliasing: F[Boolean] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: DatabaseMetaData.supportsColumnAliasing()")) *>
     F.delay(value.supportsColumnAliasing())
 
-  def supportsConvert =
-    F.delay(Console.err.println("DatabaseMetaData.supportsConvert()")) *>
+  val supportsConvert: F[Boolean] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: DatabaseMetaData.supportsConvert()")) *>
     F.delay(value.supportsConvert())
 
-  def supportsConvert(a: Int, b: Int) =
-    F.delay(Console.err.println(s"DatabaseMetaData.supportsConvert($a, $b)")) *>
+  def supportsConvert(a: Int, b: Int): F[Boolean] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: DatabaseMetaData.supportsConvert($a, $b)")) *>
     F.delay(value.supportsConvert(a, b))
 
-  def supportsCoreSQLGrammar =
-    F.delay(Console.err.println("DatabaseMetaData.supportsCoreSQLGrammar()")) *>
+  val supportsCoreSQLGrammar: F[Boolean] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: DatabaseMetaData.supportsCoreSQLGrammar()")) *>
     F.delay(value.supportsCoreSQLGrammar())
 
-  def supportsCorrelatedSubqueries =
-    F.delay(Console.err.println("DatabaseMetaData.supportsCorrelatedSubqueries()")) *>
+  val supportsCorrelatedSubqueries: F[Boolean] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: DatabaseMetaData.supportsCorrelatedSubqueries()")) *>
     F.delay(value.supportsCorrelatedSubqueries())
 
-  def supportsDataDefinitionAndDataManipulationTransactions =
-    F.delay(Console.err.println("DatabaseMetaData.supportsDataDefinitionAndDataManipulationTransactions()")) *>
+  val supportsDataDefinitionAndDataManipulationTransactions: F[Boolean] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: DatabaseMetaData.supportsDataDefinitionAndDataManipulationTransactions()")) *>
     F.delay(value.supportsDataDefinitionAndDataManipulationTransactions())
 
-  def supportsDataManipulationTransactionsOnly =
-    F.delay(Console.err.println("DatabaseMetaData.supportsDataManipulationTransactionsOnly()")) *>
+  val supportsDataManipulationTransactionsOnly: F[Boolean] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: DatabaseMetaData.supportsDataManipulationTransactionsOnly()")) *>
     F.delay(value.supportsDataManipulationTransactionsOnly())
 
-  def supportsDifferentTableCorrelationNames =
-    F.delay(Console.err.println("DatabaseMetaData.supportsDifferentTableCorrelationNames()")) *>
+  val supportsDifferentTableCorrelationNames: F[Boolean] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: DatabaseMetaData.supportsDifferentTableCorrelationNames()")) *>
     F.delay(value.supportsDifferentTableCorrelationNames())
 
-  def supportsExpressionsInOrderBy =
-    F.delay(Console.err.println("DatabaseMetaData.supportsExpressionsInOrderBy()")) *>
+  val supportsExpressionsInOrderBy: F[Boolean] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: DatabaseMetaData.supportsExpressionsInOrderBy()")) *>
     F.delay(value.supportsExpressionsInOrderBy())
 
-  def supportsExtendedSQLGrammar =
-    F.delay(Console.err.println("DatabaseMetaData.supportsExtendedSQLGrammar()")) *>
+  val supportsExtendedSQLGrammar: F[Boolean] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: DatabaseMetaData.supportsExtendedSQLGrammar()")) *>
     F.delay(value.supportsExtendedSQLGrammar())
 
-  def supportsFullOuterJoins =
-    F.delay(Console.err.println("DatabaseMetaData.supportsFullOuterJoins()")) *>
+  val supportsFullOuterJoins: F[Boolean] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: DatabaseMetaData.supportsFullOuterJoins()")) *>
     F.delay(value.supportsFullOuterJoins())
 
-  def supportsGetGeneratedKeys =
-    F.delay(Console.err.println("DatabaseMetaData.supportsGetGeneratedKeys()")) *>
+  val supportsGetGeneratedKeys: F[Boolean] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: DatabaseMetaData.supportsGetGeneratedKeys()")) *>
     F.delay(value.supportsGetGeneratedKeys())
 
-  def supportsGroupBy =
-    F.delay(Console.err.println("DatabaseMetaData.supportsGroupBy()")) *>
+  val supportsGroupBy: F[Boolean] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: DatabaseMetaData.supportsGroupBy()")) *>
     F.delay(value.supportsGroupBy())
 
-  def supportsGroupByBeyondSelect =
-    F.delay(Console.err.println("DatabaseMetaData.supportsGroupByBeyondSelect()")) *>
+  val supportsGroupByBeyondSelect: F[Boolean] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: DatabaseMetaData.supportsGroupByBeyondSelect()")) *>
     F.delay(value.supportsGroupByBeyondSelect())
 
-  def supportsGroupByUnrelated =
-    F.delay(Console.err.println("DatabaseMetaData.supportsGroupByUnrelated()")) *>
+  val supportsGroupByUnrelated: F[Boolean] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: DatabaseMetaData.supportsGroupByUnrelated()")) *>
     F.delay(value.supportsGroupByUnrelated())
 
-  def supportsIntegrityEnhancementFacility =
-    F.delay(Console.err.println("DatabaseMetaData.supportsIntegrityEnhancementFacility()")) *>
+  val supportsIntegrityEnhancementFacility: F[Boolean] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: DatabaseMetaData.supportsIntegrityEnhancementFacility()")) *>
     F.delay(value.supportsIntegrityEnhancementFacility())
 
-  def supportsLikeEscapeClause =
-    F.delay(Console.err.println("DatabaseMetaData.supportsLikeEscapeClause()")) *>
+  val supportsLikeEscapeClause: F[Boolean] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: DatabaseMetaData.supportsLikeEscapeClause()")) *>
     F.delay(value.supportsLikeEscapeClause())
 
-  def supportsLimitedOuterJoins =
-    F.delay(Console.err.println("DatabaseMetaData.supportsLimitedOuterJoins()")) *>
+  val supportsLimitedOuterJoins: F[Boolean] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: DatabaseMetaData.supportsLimitedOuterJoins()")) *>
     F.delay(value.supportsLimitedOuterJoins())
 
-  def supportsMinimumSQLGrammar =
-    F.delay(Console.err.println("DatabaseMetaData.supportsMinimumSQLGrammar()")) *>
+  val supportsMinimumSQLGrammar: F[Boolean] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: DatabaseMetaData.supportsMinimumSQLGrammar()")) *>
     F.delay(value.supportsMinimumSQLGrammar())
 
-  def supportsMixedCaseIdentifiers =
-    F.delay(Console.err.println("DatabaseMetaData.supportsMixedCaseIdentifiers()")) *>
+  val supportsMixedCaseIdentifiers: F[Boolean] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: DatabaseMetaData.supportsMixedCaseIdentifiers()")) *>
     F.delay(value.supportsMixedCaseIdentifiers())
 
-  def supportsMixedCaseQuotedIdentifiers =
-    F.delay(Console.err.println("DatabaseMetaData.supportsMixedCaseQuotedIdentifiers()")) *>
+  val supportsMixedCaseQuotedIdentifiers: F[Boolean] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: DatabaseMetaData.supportsMixedCaseQuotedIdentifiers()")) *>
     F.delay(value.supportsMixedCaseQuotedIdentifiers())
 
-  def supportsMultipleOpenResults =
-    F.delay(Console.err.println("DatabaseMetaData.supportsMultipleOpenResults()")) *>
+  val supportsMultipleOpenResults: F[Boolean] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: DatabaseMetaData.supportsMultipleOpenResults()")) *>
     F.delay(value.supportsMultipleOpenResults())
 
-  def supportsMultipleResultSets =
-    F.delay(Console.err.println("DatabaseMetaData.supportsMultipleResultSets()")) *>
+  val supportsMultipleResultSets: F[Boolean] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: DatabaseMetaData.supportsMultipleResultSets()")) *>
     F.delay(value.supportsMultipleResultSets())
 
-  def supportsMultipleTransactions =
-    F.delay(Console.err.println("DatabaseMetaData.supportsMultipleTransactions()")) *>
+  val supportsMultipleTransactions: F[Boolean] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: DatabaseMetaData.supportsMultipleTransactions()")) *>
     F.delay(value.supportsMultipleTransactions())
 
-  def supportsNamedParameters =
-    F.delay(Console.err.println("DatabaseMetaData.supportsNamedParameters()")) *>
+  val supportsNamedParameters: F[Boolean] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: DatabaseMetaData.supportsNamedParameters()")) *>
     F.delay(value.supportsNamedParameters())
 
-  def supportsNonNullableColumns =
-    F.delay(Console.err.println("DatabaseMetaData.supportsNonNullableColumns()")) *>
+  val supportsNonNullableColumns: F[Boolean] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: DatabaseMetaData.supportsNonNullableColumns()")) *>
     F.delay(value.supportsNonNullableColumns())
 
-  def supportsOpenCursorsAcrossCommit =
-    F.delay(Console.err.println("DatabaseMetaData.supportsOpenCursorsAcrossCommit()")) *>
+  val supportsOpenCursorsAcrossCommit: F[Boolean] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: DatabaseMetaData.supportsOpenCursorsAcrossCommit()")) *>
     F.delay(value.supportsOpenCursorsAcrossCommit())
 
-  def supportsOpenCursorsAcrossRollback =
-    F.delay(Console.err.println("DatabaseMetaData.supportsOpenCursorsAcrossRollback()")) *>
+  val supportsOpenCursorsAcrossRollback: F[Boolean] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: DatabaseMetaData.supportsOpenCursorsAcrossRollback()")) *>
     F.delay(value.supportsOpenCursorsAcrossRollback())
 
-  def supportsOpenStatementsAcrossCommit =
-    F.delay(Console.err.println("DatabaseMetaData.supportsOpenStatementsAcrossCommit()")) *>
+  val supportsOpenStatementsAcrossCommit: F[Boolean] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: DatabaseMetaData.supportsOpenStatementsAcrossCommit()")) *>
     F.delay(value.supportsOpenStatementsAcrossCommit())
 
-  def supportsOpenStatementsAcrossRollback =
-    F.delay(Console.err.println("DatabaseMetaData.supportsOpenStatementsAcrossRollback()")) *>
+  val supportsOpenStatementsAcrossRollback: F[Boolean] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: DatabaseMetaData.supportsOpenStatementsAcrossRollback()")) *>
     F.delay(value.supportsOpenStatementsAcrossRollback())
 
-  def supportsOrderByUnrelated =
-    F.delay(Console.err.println("DatabaseMetaData.supportsOrderByUnrelated()")) *>
+  val supportsOrderByUnrelated: F[Boolean] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: DatabaseMetaData.supportsOrderByUnrelated()")) *>
     F.delay(value.supportsOrderByUnrelated())
 
-  def supportsOuterJoins =
-    F.delay(Console.err.println("DatabaseMetaData.supportsOuterJoins()")) *>
+  val supportsOuterJoins: F[Boolean] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: DatabaseMetaData.supportsOuterJoins()")) *>
     F.delay(value.supportsOuterJoins())
 
-  def supportsPositionedDelete =
-    F.delay(Console.err.println("DatabaseMetaData.supportsPositionedDelete()")) *>
+  val supportsPositionedDelete: F[Boolean] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: DatabaseMetaData.supportsPositionedDelete()")) *>
     F.delay(value.supportsPositionedDelete())
 
-  def supportsPositionedUpdate =
-    F.delay(Console.err.println("DatabaseMetaData.supportsPositionedUpdate()")) *>
+  val supportsPositionedUpdate: F[Boolean] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: DatabaseMetaData.supportsPositionedUpdate()")) *>
     F.delay(value.supportsPositionedUpdate())
 
-  def supportsRefCursors =
-    F.delay(Console.err.println("DatabaseMetaData.supportsRefCursors()")) *>
+  val supportsRefCursors: F[Boolean] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: DatabaseMetaData.supportsRefCursors()")) *>
     F.delay(value.supportsRefCursors())
 
-  def supportsResultSetConcurrency(a: Int, b: Int) =
-    F.delay(Console.err.println(s"DatabaseMetaData.supportsResultSetConcurrency($a, $b)")) *>
+  def supportsResultSetConcurrency(a: Int, b: Int): F[Boolean] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: DatabaseMetaData.supportsResultSetConcurrency($a, $b)")) *>
     F.delay(value.supportsResultSetConcurrency(a, b))
 
-  def supportsResultSetHoldability(a: Int) =
-    F.delay(Console.err.println(s"DatabaseMetaData.supportsResultSetHoldability($a)")) *>
+  def supportsResultSetHoldability(a: Int): F[Boolean] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: DatabaseMetaData.supportsResultSetHoldability($a)")) *>
     F.delay(value.supportsResultSetHoldability(a))
 
-  def supportsResultSetType(a: Int) =
-    F.delay(Console.err.println(s"DatabaseMetaData.supportsResultSetType($a)")) *>
+  def supportsResultSetType(a: Int): F[Boolean] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: DatabaseMetaData.supportsResultSetType($a)")) *>
     F.delay(value.supportsResultSetType(a))
 
-  def supportsSavepoints =
-    F.delay(Console.err.println("DatabaseMetaData.supportsSavepoints()")) *>
+  val supportsSavepoints: F[Boolean] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: DatabaseMetaData.supportsSavepoints()")) *>
     F.delay(value.supportsSavepoints())
 
-  def supportsSchemasInDataManipulation =
-    F.delay(Console.err.println("DatabaseMetaData.supportsSchemasInDataManipulation()")) *>
+  val supportsSchemasInDataManipulation: F[Boolean] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: DatabaseMetaData.supportsSchemasInDataManipulation()")) *>
     F.delay(value.supportsSchemasInDataManipulation())
 
-  def supportsSchemasInIndexDefinitions =
-    F.delay(Console.err.println("DatabaseMetaData.supportsSchemasInIndexDefinitions()")) *>
+  val supportsSchemasInIndexDefinitions: F[Boolean] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: DatabaseMetaData.supportsSchemasInIndexDefinitions()")) *>
     F.delay(value.supportsSchemasInIndexDefinitions())
 
-  def supportsSchemasInPrivilegeDefinitions =
-    F.delay(Console.err.println("DatabaseMetaData.supportsSchemasInPrivilegeDefinitions()")) *>
+  val supportsSchemasInPrivilegeDefinitions: F[Boolean] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: DatabaseMetaData.supportsSchemasInPrivilegeDefinitions()")) *>
     F.delay(value.supportsSchemasInPrivilegeDefinitions())
 
-  def supportsSchemasInProcedureCalls =
-    F.delay(Console.err.println("DatabaseMetaData.supportsSchemasInProcedureCalls()")) *>
+  val supportsSchemasInProcedureCalls: F[Boolean] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: DatabaseMetaData.supportsSchemasInProcedureCalls()")) *>
     F.delay(value.supportsSchemasInProcedureCalls())
 
-  def supportsSchemasInTableDefinitions =
-    F.delay(Console.err.println("DatabaseMetaData.supportsSchemasInTableDefinitions()")) *>
+  val supportsSchemasInTableDefinitions: F[Boolean] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: DatabaseMetaData.supportsSchemasInTableDefinitions()")) *>
     F.delay(value.supportsSchemasInTableDefinitions())
 
-  def supportsSelectForUpdate =
-    F.delay(Console.err.println("DatabaseMetaData.supportsSelectForUpdate()")) *>
+  val supportsSelectForUpdate: F[Boolean] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: DatabaseMetaData.supportsSelectForUpdate()")) *>
     F.delay(value.supportsSelectForUpdate())
 
-  def supportsStatementPooling =
-    F.delay(Console.err.println("DatabaseMetaData.supportsStatementPooling()")) *>
+  val supportsStatementPooling: F[Boolean] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: DatabaseMetaData.supportsStatementPooling()")) *>
     F.delay(value.supportsStatementPooling())
 
-  def supportsStoredFunctionsUsingCallSyntax =
-    F.delay(Console.err.println("DatabaseMetaData.supportsStoredFunctionsUsingCallSyntax()")) *>
+  val supportsStoredFunctionsUsingCallSyntax: F[Boolean] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: DatabaseMetaData.supportsStoredFunctionsUsingCallSyntax()")) *>
     F.delay(value.supportsStoredFunctionsUsingCallSyntax())
 
-  def supportsStoredProcedures =
-    F.delay(Console.err.println("DatabaseMetaData.supportsStoredProcedures()")) *>
+  val supportsStoredProcedures: F[Boolean] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: DatabaseMetaData.supportsStoredProcedures()")) *>
     F.delay(value.supportsStoredProcedures())
 
-  def supportsSubqueriesInComparisons =
-    F.delay(Console.err.println("DatabaseMetaData.supportsSubqueriesInComparisons()")) *>
+  val supportsSubqueriesInComparisons: F[Boolean] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: DatabaseMetaData.supportsSubqueriesInComparisons()")) *>
     F.delay(value.supportsSubqueriesInComparisons())
 
-  def supportsSubqueriesInExists =
-    F.delay(Console.err.println("DatabaseMetaData.supportsSubqueriesInExists()")) *>
+  val supportsSubqueriesInExists: F[Boolean] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: DatabaseMetaData.supportsSubqueriesInExists()")) *>
     F.delay(value.supportsSubqueriesInExists())
 
-  def supportsSubqueriesInIns =
-    F.delay(Console.err.println("DatabaseMetaData.supportsSubqueriesInIns()")) *>
+  val supportsSubqueriesInIns: F[Boolean] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: DatabaseMetaData.supportsSubqueriesInIns()")) *>
     F.delay(value.supportsSubqueriesInIns())
 
-  def supportsSubqueriesInQuantifieds =
-    F.delay(Console.err.println("DatabaseMetaData.supportsSubqueriesInQuantifieds()")) *>
+  val supportsSubqueriesInQuantifieds: F[Boolean] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: DatabaseMetaData.supportsSubqueriesInQuantifieds()")) *>
     F.delay(value.supportsSubqueriesInQuantifieds())
 
-  def supportsTableCorrelationNames =
-    F.delay(Console.err.println("DatabaseMetaData.supportsTableCorrelationNames()")) *>
+  val supportsTableCorrelationNames: F[Boolean] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: DatabaseMetaData.supportsTableCorrelationNames()")) *>
     F.delay(value.supportsTableCorrelationNames())
 
-  def supportsTransactionIsolationLevel(a: Int) =
-    F.delay(Console.err.println(s"DatabaseMetaData.supportsTransactionIsolationLevel($a)")) *>
+  def supportsTransactionIsolationLevel(a: Int): F[Boolean] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: DatabaseMetaData.supportsTransactionIsolationLevel($a)")) *>
     F.delay(value.supportsTransactionIsolationLevel(a))
 
-  def supportsTransactions =
-    F.delay(Console.err.println("DatabaseMetaData.supportsTransactions()")) *>
+  val supportsTransactions: F[Boolean] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: DatabaseMetaData.supportsTransactions()")) *>
     F.delay(value.supportsTransactions())
 
-  def supportsUnion =
-    F.delay(Console.err.println("DatabaseMetaData.supportsUnion()")) *>
+  val supportsUnion: F[Boolean] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: DatabaseMetaData.supportsUnion()")) *>
     F.delay(value.supportsUnion())
 
-  def supportsUnionAll =
-    F.delay(Console.err.println("DatabaseMetaData.supportsUnionAll()")) *>
+  val supportsUnionAll: F[Boolean] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: DatabaseMetaData.supportsUnionAll()")) *>
     F.delay(value.supportsUnionAll())
 
-  def unwrap[T](a: Class[T]) =
-    F.delay(Console.err.println(s"DatabaseMetaData.unwrap($a)")) *>
+  def unwrap[T](a: Class[T]): F[T] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: DatabaseMetaData.unwrap($a)")) *>
     F.delay(value.unwrap(a))
 
-  def updatesAreDetected(a: Int) =
-    F.delay(Console.err.println(s"DatabaseMetaData.updatesAreDetected($a)")) *>
+  def updatesAreDetected(a: Int): F[Boolean] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: DatabaseMetaData.updatesAreDetected($a)")) *>
     F.delay(value.updatesAreDetected(a))
 
-  def usesLocalFilePerTable =
-    F.delay(Console.err.println("DatabaseMetaData.usesLocalFilePerTable()")) *>
+  val usesLocalFilePerTable: F[Boolean] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: DatabaseMetaData.usesLocalFilePerTable()")) *>
     F.delay(value.usesLocalFilePerTable())
 
-  def usesLocalFiles =
-    F.delay(Console.err.println("DatabaseMetaData.usesLocalFiles()")) *>
+  val usesLocalFiles: F[Boolean] =
+    F.delay(Console.err.println(s"${Thread.currentThread}: DatabaseMetaData.usesLocalFiles()")) *>
     F.delay(value.usesLocalFiles())
 
 }
