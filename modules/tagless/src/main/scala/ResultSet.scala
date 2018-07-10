@@ -8,17 +8,14 @@ import cats.Alternative
 import cats.effect.Sync
 import cats.implicits._
 import doobie.Read
-import doobie.tagless.jdbc._
+import doobie.tagless.async._
 import fs2.Stream
 import java.sql
 import scala.annotation.tailrec
 import scala.collection.generic.CanBuildFrom
 import scala.collection.mutable.Builder
 
-final case class ResultSet[F[_]](jdbc: JdbcResultSet[F], interp: Interpreter[F]) {
-
-  private val raw: F[sql.ResultSet] =
-    jdbc.unwrap(Predef.classOf[sql.ResultSet])
+final case class ResultSet[F[_]](jdbc: AsyncResultSet[F], interp: Interpreter[F]) {
 
   /**
    * Stream the resultset, setting fetch size to `chunkSize`, interpreting rows as type `A`,
@@ -61,25 +58,23 @@ final case class ResultSet[F[_]](jdbc: JdbcResultSet[F], interp: Interpreter[F])
              sf: Sync[F],
             cbf: CanBuildFrom[Nothing, B, C[B]]
   ): F[C[B]] =
-    raw.flatMap { rs =>
-      interp.rts.block.use { _ =>
-        sf.delay {
+    interp.rts.block.use { _ =>
+      sf.delay {
 
-          if (interp.log.isTraceEnabled) {
-            val types = ca.gets.map { case (g, _) =>
-              g.typeStack.reverse.map(_.getOrElse("«unknown»")).toList.mkString(" -> ")
-            }
-            interp.log.trace(s"ResultSet.chunkMap($chunkSize) of ${types.mkString(", ")}")
+        if (interp.log.isTraceEnabled) {
+          val types = ca.gets.map { case (g, _) =>
+            g.typeStack.last.fold("«unknown»")(_.toString)
           }
-
-          @tailrec
-          def go(accum: Builder[B, C[B]], n: Long): C[B] =
-            if (n > 0 && rs.next) {
-              val b = f(ca.unsafeGet(rs, 1))
-              go(accum += b, n - 1)
-            } else accum.result
-          go(cbf(), chunkSize)
+          interp.log.trace(s"${jdbc.id} chunkMap($chunkSize) of ${types.mkString(", ")}")
         }
+
+        @tailrec
+        def go(accum: Builder[B, C[B]], n: Long): C[B] =
+          if (n > 0 && jdbc.value.next) {
+            val b = f(ca.unsafeGet(jdbc.value, 1))
+            go(accum += b, n - 1)
+          } else accum.result
+        go(cbf(), chunkSize)
       }
     }
 
@@ -93,16 +88,14 @@ final case class ResultSet[F[_]](jdbc: JdbcResultSet[F], interp: Interpreter[F])
              sf: Sync[F],
              ac: Alternative[C]
   ): F[C[B]] =
-    raw.flatMap { rs =>
-      sf.delay {
-        @tailrec
-        def go(accum: C[B], n: Long): C[B] =
-          if (n > 0 && rs.next) {
-            val b = f(ca.unsafeGet(rs, 1))
-            go(accum <+> ac.pure(b), n - 1)
-          } else accum
-        go(ac.empty, chunkSize)
-      }
+    sf.delay {
+      @tailrec
+      def go(accum: C[B], n: Long): C[B] =
+        if (n > 0 && jdbc.value.next) {
+          val b = f(ca.unsafeGet(jdbc.value, 1))
+          go(accum <+> ac.pure(b), n - 1)
+        } else accum
+      go(ac.empty, chunkSize)
     }
 
 }

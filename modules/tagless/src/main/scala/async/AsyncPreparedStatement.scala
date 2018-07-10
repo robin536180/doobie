@@ -38,7 +38,7 @@ import java.util.Calendar
  * given a Sync instance.
  */
 @SuppressWarnings(Array("org.wartremover.warts.Overloading"))
-class AsyncPreparedStatement[F[_]: Sync](value: PreparedStatement, rts: RTS[F], log: Logger) extends JdbcPreparedStatement[F] {
+class AsyncPreparedStatement[F[_]: Sync](val value: PreparedStatement, val rts: RTS[F], val log: Logger) extends JdbcPreparedStatement[F] {
 
   val id: String =
     s"${System.identityHashCode(value).toHexString.padTo(8, ' ')} PreparedStatement".padTo(28, ' ')

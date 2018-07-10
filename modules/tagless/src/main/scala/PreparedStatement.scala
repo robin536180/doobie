@@ -8,15 +8,11 @@ import cats._
 import cats.effect.{ Resource, Sync }
 import cats.implicits._
 import doobie.Write
-import doobie.tagless.jdbc._
+import doobie.tagless.async._
 import fs2.{ Pipe, Sink, Stream }
 import java.sql
 
-final case class PreparedStatement[F[_]](jdbc: JdbcPreparedStatement[F], interp: Interpreter[F]) {
-
-  private val raw: F[sql.PreparedStatement] =
-    // todo: RTS.block.use { _ => ... }
-    jdbc.unwrap(Predef.classOf[sql.PreparedStatement])
+final case class PreparedStatement[F[_]](jdbc: AsyncPreparedStatement[F], interp: Interpreter[F]) {
 
   /** Execute this statement as a query, yielding a ResultSet[F] that will be cleaned up. */
   def executeQuery(implicit ev: Functor[F]): Resource[F, ResultSet[F]] =
@@ -30,9 +26,7 @@ final case class PreparedStatement[F[_]](jdbc: JdbcPreparedStatement[F], interp:
     implicit ca: Write[A],
              sf: Sync[F]
   ): F[Unit] =
-    raw.flatMap { ps =>
-      sf.delay(ca.unsafeSet(ps, offset, a))
-    }
+    sf.delay(ca.unsafeSet(jdbc.value, offset, a))
 
   /**
    * Construct a sink for batch update, discarding update counts. Note that the result array will
@@ -56,28 +50,26 @@ final case class PreparedStatement[F[_]](jdbc: JdbcPreparedStatement[F], interp:
     as.through(rawPipe[A]).flatMap(a => Stream.emits(a)).map(BatchResult.fromJdbc)
 
   /** Construct a pipe for batch update, emitting a single array containing raw JDBC update counts. */
-  @SuppressWarnings(Array("org.wartremover.warts.Var"))
+  @SuppressWarnings(Array("org.wartremover.warts.Var", "org.wartremover.warts.ToString"))
   private def rawPipe[A](
     implicit ca: Write[A],
              sf: Sync[F]
   ): Pipe[F, A, Array[Int]] = as =>
     as.segments.evalMap { segment =>
-      raw.flatMap { ps =>
-        interp.rts.block.use { _ =>
-          if (interp.log.isTraceEnabled) {
-            val types = ca.puts.map { case (g, _) =>
-              g.typeStack.map(_.getOrElse("«unknown»")).toList.mkString(" -> ")
-            }
-            interp.log.trace(s"PreparedStatement.rawPipe bulk addBatch of ${types.mkString(", ")}")
+      interp.rts.block.use { _ =>
+        if (interp.log.isTraceEnabled) {
+          val types = ca.puts.map { case (g, _) =>
+            g.typeStack.head.fold("«unknown»")(_.toString)
           }
-          sf.delay {
-            val f = segment.force
-            var n = 0
-            f.foreach { a =>
-              ca.unsafeSet(ps, 1, a)
-              ps.addBatch
-              n += 1
-            }
+          interp.log.trace(s"${jdbc.id} addBatch(*) of ${types.mkString(", ")}")
+        }
+        sf.delay {
+          val f = segment.force
+          var n = 0
+          f.foreach { a =>
+            ca.unsafeSet(jdbc.value, 1, a)
+            jdbc.value.addBatch
+            n += 1
           }
         }
       }

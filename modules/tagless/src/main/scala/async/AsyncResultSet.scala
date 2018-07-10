@@ -37,7 +37,7 @@ import java.util.Map
  * given a Sync instance.
  */
 @SuppressWarnings(Array("org.wartremover.warts.Overloading"))
-class AsyncResultSet[F[_]: Sync](value: ResultSet, rts: RTS[F], log: Logger) extends JdbcResultSet[F] {
+class AsyncResultSet[F[_]: Sync](val value: ResultSet, val rts: RTS[F], val log: Logger) extends JdbcResultSet[F] {
 
   val id: String =
     s"${System.identityHashCode(value).toHexString.padTo(8, ' ')} ResultSet".padTo(28, ' ')

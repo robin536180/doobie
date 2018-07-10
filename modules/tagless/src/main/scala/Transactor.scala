@@ -10,7 +10,6 @@ import cats.implicits._
 import doobie.tagless.async._
 import fs2.Stream
 import fs2.Stream.eval_
-import org.slf4j.LoggerFactory
 import java.sql
 
 @SuppressWarnings(Array("org.wartremover.warts.Overloading"))
